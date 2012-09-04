@@ -13,3 +13,7 @@
 	br = branch
 	ss = status -s
 	glog = log --graph
+[pretty]
+	compact = [%h]  %ad  (%an <%ae>)%n    %s%n
+[format]
+	pretty = compact
