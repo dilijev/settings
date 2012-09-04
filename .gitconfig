@@ -13,6 +13,7 @@
 	br = branch
 	ss = status -s
 	glog = log --graph
+	dc = diff --cached
 [pretty]
 	compact = [%h]  %ad  (%an <%ae>)%n    %s%n
 [format]
