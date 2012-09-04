@@ -1,4 +1,4 @@
-source ~/.bash-colors
+source ~/.bash_colors
 
 #PS1="\t ${debian_chroot:+($debian_chroot)}\u@\h:\w\$ "
 PS1="${RED}\t ${GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${CYAN}\w${NORMAL}\$ "
