@@ -11,7 +11,7 @@ alias valedit='vim ~/.bash_aliases'
 alias galedit='gedit ~/.bash_aliases'
 alias alrl='source ~/.bash_aliases'
 alias alrc='source ~/.bashrc'
-alias alsave='cp ~/.bashrc ~/settings/; cp ~/.bash_aliases ~/settings/;'
+alias saveset='cp ~/.bash* ~/settings/; cp ~/.git* ~/settings/'
 
 alias exe='chmod 755'
 alias go='nautilus'
