@@ -24,7 +24,7 @@ set diffcontext 3
 set selectbgcolor gray85
 set extdifftool meld
 set perfile_attrs 0
-set geometry(main) 1207x723+313+153
+set geometry(main) 1207x723+522+152
 set geometry(state) normal
 set geometry(topwidth) 1207
 set geometry(topheight) 210
