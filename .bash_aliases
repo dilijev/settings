@@ -23,7 +23,7 @@ alias up='cd ..'
 alias u='up'
 
 alias demi='cd ~/Dropbox/demi/'
-alias dropbox='~/dropbox' #program
+#alias dropbox='~/dropbox' #program
 alias dbstart='dropbox start'
 alias dbstop='dropbox stop'
 
