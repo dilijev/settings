@@ -113,8 +113,8 @@ PS1="${debian_chroot:+($debian_chroot)}\u@\h:\w\$ "       # original
 #
 
 #PS1="${RED}\t ${GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${CYAN}\w${NORMAL}\$ "
-#PS1="${RED}\t ${GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLUE}\w${NORMAL}\$ "
-PS1="${RED}\t ${BRIGHT_GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLUE}\w${NORMAL}\$ "
+PS1="${RED}\t ${GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLUE}\w${NORMAL}\$ "
+#PS1="${RED}\t ${BRIGHT_GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLUE}\w${NORMAL}\$ "
 #PS1="${BRIGHT_RED}\t ${BRIGHT_GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLUE}\w${NORMAL}\$ "
 
 #PS1="${RED}\t ${GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL} : \w ${GREEN}\$${NORMAL} "
