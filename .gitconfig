@@ -13,8 +13,10 @@
 	br = branch
 	ss = status -s
 	glog = log --graph
+	lg = log --pretty=format:\"[%h]  %ad  (%an <%ae>)%n    %s%n\"
+	gl = log --graph --pretty=format:\"[%h]  %ad  (%an <%ae>)%n    %s%n\"
 	dc = diff --cached
 [pretty]
 	compact = [%h]  %ad  (%an <%ae>)%n    %s%n
 [format]
-	pretty = compact
+	pretty = medium
