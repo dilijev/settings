@@ -96,15 +96,19 @@ alias graphics='cd $GRAPHICS'
 alias graph='graphics'
 alias 354='graphics'
 
-alias graph1='graphics; cd projects/cs354-1'
-
 alias oop='cd $OOP'
 alias 371='oop'
 alias 371p='oop'
-
-alias oop1='oop; cd projects/cs371p-collatz'
 
 alias design='cd $DESIGN'
 alias arch='cd $ARCH'
 alias orch='cd $ORCH'
 alias dance='cd $DANCE'
+
+alias graph1='graphics; cd projects/cs354-1'
+
+alias oop1='oop; cd projects/cs371p-collatz'
+alias oop1t='oop; cd projects/cs371p-collatz-tests'
+
+alias arch1='arch; cd labs/ee460n-lab1'
+
