@@ -23,7 +23,10 @@ alias up='cd ..'
 alias u='up'
 
 alias demi='cd ~/Dropbox/demi/'
-#alias dropbox='~/dropbox' #program
+
+if [ -f ~/dropbox ]; then
+	alias dropbox='~/dropbox' #program
+fi
 alias dbstart='dropbox start'
 alias dbstop='dropbox stop'
 
@@ -106,9 +109,20 @@ alias orch='cd $ORCH'
 alias dance='cd $DANCE'
 
 alias graph1='graphics; cd projects/cs354-1'
+alias graph2='graphics; cd projects/cs354-2'
+alias graph3='graphics; cd projects/cs354-3'
+alias graph4='graphics; cd projects/cs354-4'
+alias graph5='graphics; cd projects/cs354-5'
+alias graph6='graphics; cd projects/cs354-6'
 
 alias oop1='oop; cd projects/cs371p-collatz'
 alias oop1t='oop; cd projects/cs371p-collatz-tests'
+alias oop2='oop; cd projects/cs371p-voting'
+alias oop2t='oop; cd projects/cs371p-voting-tests'
+alias oop3='oop; cd projects/cs371p-allocator'
+alias oop3t='oop; cd projects/cs371p-allocator-tests'
 
 alias arch1='arch; cd labs/ee460n-lab1'
+alias arch2='arch; cd labs/ee460n-lab2'
+alias arch3='arch; cd labs/ee460n-lab3'
 
