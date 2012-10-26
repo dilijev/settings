@@ -123,8 +123,11 @@ alias oop3='oop; cd projects/cs371p-allocator'
 alias oop3t='oop; cd projects/cs371p-allocator-tests'
 alias oop4='oop; cd projects/cs371p-matlab'
 alias oop4t='oop; cd projects/cs371p-matlab-tests'
+alias oop5='oop; cd projects/cs371p-darwin'
+alias oop5t='oop; cd projects/cs371p-darwin-tests'
 
 alias arch1='arch; cd labs/ee460n-lab1'
 alias arch2='arch; cd labs/ee460n-lab2'
 alias arch3='arch; cd labs/ee460n-lab3'
-
+alias arch4='arch; cd labs/ee460n-lab4'
+alias arch5='arch; cd labs/ee460n-lab5'
