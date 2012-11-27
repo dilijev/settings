@@ -125,6 +125,8 @@ alias oop4='oop; cd projects/cs371p-matlab'
 alias oop4t='oop; cd projects/cs371p-matlab-tests'
 alias oop5='oop; cd projects/cs371p-darwin'
 alias oop5t='oop; cd projects/cs371p-darwin-tests'
+alias oop6='oop; cd projects/cs371p-life'
+alias oop6t='oop; cd projects/cs371p-life-tests'
 
 alias arch1='arch; cd labs/ee460n-lab1'
 alias arch2='arch; cd labs/ee460n-lab2'
