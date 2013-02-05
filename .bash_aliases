@@ -134,3 +134,21 @@ alias arch3='arch; cd labs/ee460n-lab3'
 alias arch4='arch; cd labs/ee460n-lab4'
 alias arch5='arch; cd labs/ee460n-lab5'
 alias arch6='arch; cd labs/ee460n-lab6'
+
+#
+# 12s
+#
+
+SEM12S=~/Dropbox/classes/12s
+COMPILERS=$SEM12F"/cs375-compilers"
+
+alias 12s='cd $SEM12S'
+
+alias compilers='cd $COMPILERS'
+alias 375='compilers'
+alias comp1='compilers; cd lab1'
+alias comp2='compilers; cd lab2'
+alias comp3='compilers; cd lab3'
+alias comp4='compilers; cd lab4'
+alias comp5='compilers; cd lab5'
+alias comp6='compilers; cd lab6'
