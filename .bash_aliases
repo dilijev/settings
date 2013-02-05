@@ -136,13 +136,13 @@ alias arch5='arch; cd labs/ee460n-lab5'
 alias arch6='arch; cd labs/ee460n-lab6'
 
 #
-# 12s
+# 13s
 #
 
-SEM12S=~/Dropbox/classes/12s
-COMPILERS=$SEM12F"/cs375-compilers"
+SEM13S=~/Dropbox/classes/13s
+COMPILERS=$SEM13S"/cs375-compilers"
 
-alias 12s='cd $SEM12S'
+alias 13s='cd $SEM13S'
 
 alias compilers='cd $COMPILERS'
 alias 375='compilers'
