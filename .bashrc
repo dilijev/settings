@@ -124,3 +124,11 @@ PS1="${RED}\t ${GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_
 #PS1="${RED}\t ${BRIGHT_GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLACK}\w${NORMAL}\$ "
 #PS1="${RED}\t ${BRIGHT_GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLUE}\w${NORMAL}\$ "
 
+# FASD
+
+eval "$(fasd --init auto)"
+
+# CS 392F
+export CLASSPATH=.:~/bin/mdelite/MDELite2.3.jar
+export PATH=${PATH}:~/bin/ahead-v2013.03.20/build/bin
+
