@@ -141,8 +141,10 @@ alias arch6='arch; cd labs/ee460n-lab6'
 
 SEM13S=~/Dropbox/classes/13s
 COMPILERS=$SEM13S"/cs375-compilers"
+ALGOLABS=~/Dropbox/ee360c-13s-ta/ProgrammingAssignments/Spring2013
 
 alias 13s='cd $SEM13S'
+alias algolabs='cd $ALGOLABS'
 
 alias compilers='cd $COMPILERS'
 alias 375='compilers'
@@ -152,3 +154,7 @@ alias comp3='compilers; cd lab3'
 alias comp4='compilers; cd lab4'
 alias comp5='compilers; cd lab5'
 alias comp6='compilers; cd lab6'
+
+alias lab1='algolabs; cd Lab1'
+alias lab2='algolabs; cd Lab2'
+alias lab3='algolabs; cd Lab3'
