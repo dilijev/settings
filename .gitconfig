@@ -20,3 +20,5 @@
 	compact = [%h]  %ad  (%an <%ae>)%n    %s%n
 [format]
 	pretty = medium
+[push]
+	default = simple
