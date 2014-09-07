@@ -5,6 +5,7 @@ alias lx='ls -lX'
 
 alias pride='ssh dilijev@pride.cs.utexas.edu'
 alias liukang='ssh dilijev@liukang.ece.utexas.edu'
+alias vier='ssh doug@vier.csres.utexas.edu'
 
 alias aledit='nano ~/.bash_aliases'
 alias valedit='vim ~/.bash_aliases'
