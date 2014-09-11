@@ -129,6 +129,7 @@ PS1="${RED}\t ${GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_
 eval "$(fasd --init auto)"
 
 # CS 392F
-export CLASSPATH=.:~/bin/mdelite/MDELite2.3.jar
-export PATH=${PATH}:~/bin/ahead-v2013.03.20/build/bin
+#export CLASSPATH=.:~/bin/mdelite/MDELite2.3.jar
+#export PATH=${PATH}:~/bin/ahead-v2013.03.20/build/bin
 
+export LC_ALL="C" # collate dotfiles before normal files in ls

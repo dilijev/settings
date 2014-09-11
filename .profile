@@ -40,6 +40,7 @@ export PATH
 # the -P option.  See 'man printers' for more info.
 #	PRINTER=lw7 ; export PRINTER
 
+source ~/.bashrc
 source ~/.bash_colors
 
 MAIL=${HOME}/mailbox
