@@ -1,3 +1,5 @@
+echo "loading .bash_aliases"
+
 alias grep='grep --color=auto'
 alias ls='ls --color=always --group-directories-first'
 alias ll='ls -lA'

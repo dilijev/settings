@@ -1,3 +1,5 @@
+echo "loading .bashrc"
+
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
@@ -105,7 +107,7 @@ source ~/.bash_colors
 # Color-free prompts
 #
 
-PS1="${debian_chroot:+($debian_chroot)}\u@\h:\w\$ "       # original
+#PS1="${debian_chroot:+($debian_chroot)}\u@\h:\w\$ "       # original
 #PS1="\t ${debian_chroot:+($debian_chroot)}\u@\h:\w\$ "   # with time
 
 #
@@ -124,9 +126,13 @@ PS1="${RED}\t ${GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_
 #PS1="${RED}\t ${BRIGHT_GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLACK}\w${NORMAL}\$ "
 #PS1="${RED}\t ${BRIGHT_GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLUE}\w${NORMAL}\$ "
 
+export PS1
+
+
 # FASD
 
 eval "$(fasd --init auto)"
+
 
 # CS 392F
 #export CLASSPATH=.:~/bin/mdelite/MDELite2.3.jar

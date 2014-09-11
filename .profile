@@ -1,3 +1,5 @@
+echo "loading .profile"
+
 # from the template file /lusr/share/udb/pub/dotfiles/profile
 #
 # This file is read and the commands in it are executed by the Bourne shell
@@ -40,14 +42,13 @@ export PATH
 # the -P option.  See 'man printers' for more info.
 #	PRINTER=lw7 ; export PRINTER
 
-source ~/.bashrc
-source ~/.bash_colors
-
 MAIL=${HOME}/mailbox
 MAILER=mush
 EDITOR=vi
-PS1="${RED}\t ${GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLUE}\w${NORMAL}\$ "
+PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 NNTPSERVER="newshost.cc.utexas.edu"
 
 umask 077
 export MAIL PS1 EDITOR MAILER
+
+source ~/.bashrc
