@@ -1,4 +1,4 @@
-echo "loading .profile"
+#echo "loading .profile"
 
 # from the template file /lusr/share/udb/pub/dotfiles/profile
 #
