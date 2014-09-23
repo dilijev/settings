@@ -1,1 +1,4 @@
 Do `ls -la` to see all of the actual dotfiles in this repo from a linux machine.
+
+Run `./deploy.sh` to copy these files into your home directory.
+Run `./save.sh` to copy any changes from your home directory into your repo.
