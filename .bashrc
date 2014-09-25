@@ -114,8 +114,26 @@ source ~/.bash_colors
 # Colorful prompts
 #
 
+function __git_spacer {
+	git branch &>/dev/null
+	if [ $? -eq 0 ]; then
+		echo " "
+	fi
+}
+
+function __git_prompt {
+	git branch &>/dev/null
+	if [ $? -eq 0 ]; then
+ 		git status | grep "nothing to commit" &>/dev/null
+		if [ "$?" -eq "0" ]; then
+			echo $(__git_ps1 "${GREEN}(%s)") | sed -e "s/\\\\\\[//" | sed -e "s/\\\\\\]//" 
+		else
+			echo $(__git_ps1 "${RED}(%s)") | sed -e "s/\\\\\\[//" | sed -e "s/\\\\\\]//" 
+		fi
+	fi
+}
+
 #PS1="${RED}\t ${GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${CYAN}\w${NORMAL}\$ "
-PS1="${RED}\t ${GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLUE}\w${NORMAL}\$ "
 #PS1="${RED}\t ${BRIGHT_GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLUE}\w${NORMAL}\$ "
 #PS1="${BRIGHT_RED}\t ${BRIGHT_GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLUE}\w${NORMAL}\$ "
 
@@ -125,6 +143,9 @@ PS1="${RED}\t ${GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_
 #PS1="\t ${BRIGHT_GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLACK}\w${NORMAL}\$ "
 #PS1="${RED}\t ${BRIGHT_GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLACK}\w${NORMAL}\$ "
 #PS1="${RED}\t ${BRIGHT_GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLUE}\w${NORMAL}\$ "
+
+#PS1="${RED}\t ${GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLUE}\w${NORMAL}\$ "
+PS1="${RED}\t ${GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLUE}\w${NORMAL}\$(__git_spacer)\$(__git_prompt)${NORMAL}\$ "
 
 export PS1
 
