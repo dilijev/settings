@@ -144,8 +144,8 @@ function __git_prompt {
 #PS1="${RED}\t ${BRIGHT_GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLACK}\w${NORMAL}\$ "
 #PS1="${RED}\t ${BRIGHT_GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLUE}\w${NORMAL}\$ "
 
-#PS1="${RED}\t ${GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLUE}\w${NORMAL}\$ "
-PS1="${RED}\t ${GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLUE}\w${NORMAL}\$(__git_spacer)\$(__git_prompt)${NORMAL}\$ "
+PS1="${RED}\t ${GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLUE}\w${NORMAL}\$ "
+#PS1="${RED}\t ${GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLUE}\w${NORMAL}\$(__git_spacer)\$(__git_prompt)${NORMAL}\$ "
 
 export PS1
 
