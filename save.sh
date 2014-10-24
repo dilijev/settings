@@ -4,4 +4,5 @@ cp ~/.bash_logout .
 cp ~/.bashrc .
 cp ~/.gitconfig .
 cp ~/.profile .
+cp ~/.vimrc .
 
