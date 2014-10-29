@@ -34,6 +34,7 @@ set ignorecase
 set smartcase
 
 " Highlight search results
+hi Search cterm=NONE ctermfg=black ctermbg=yellow
 set hlsearch
 
 " Makes search act like search in modern browsers
@@ -104,15 +105,11 @@ set tags+=~/.vim/tags/qt4
  
 " Install DoxygenToolkit from http://www.vim.org/scripts/script.php?script_id=987
 let g:DoxygenToolkit_authorName="John Doe <john@doe.com>"
- 
+
+"
 " Enhanced keyboard mappings
 "
-" in normal mode F2 will save the file
-nmap <F2> :w<CR>
-" in insert mode F2 will exit insert, save, enters insert again
-imap <F2> <ESC>:w<CR>i
-" switch between header/source with F4
-map <F4> :e %:p:s,.h$,.X123X,:s,.cpp$,.h,:s,.X123X$,.cpp,<CR>
+
 " recreate tags file with F5
 map <F5> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
 " create doxygen comment
@@ -121,8 +118,20 @@ map <F6> :Dox<CR>
 map <F7> :make<CR>
 " build using makeprg with <S-F7>
 map <S-F7> :make clean all<CR>
+
+" F8 turn off highlighted search results in normal or insert mode
+nmap <F8> :nohl<CR>
+imap <F8> <ESC>:nohl<CR>i
+" F9 will save the file, if insert mode, leave insert, save, re-enter insert
+nmap <F9> :w<CR>
+imap <F9> <ESC>:w<CR>i
+
+" switch between header/source with F10
+" map <F10> :e %:p:s,.h$,.X123X,:s,.cpp$,.h,:s,.X123X$,.cpp,<CR>
+map <F10> :e %:p:s,.h$,.X123X,:s,.c$,.h,:s,.X123X$,.c,<CR>
 " goto definition with F12
 map <F12> <C-]>
+
 " in diff mode we use the spell check keys for merging
 if &diff
   " diff settings
