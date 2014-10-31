@@ -37,6 +37,9 @@ set smartcase
 hi Search cterm=NONE ctermfg=black ctermbg=yellow
 set hlsearch
 
+" Highlight in visual mode in a readable way
+hi Visual term=reverse cterm=reverse guibg=LightGrey
+
 " Makes search act like search in modern browsers
 set incsearch
 
@@ -121,10 +124,10 @@ map <S-F7> :make clean all<CR>
 
 " F8 turn off highlighted search results in normal or insert mode
 nmap <F8> :nohl<CR>
-imap <F8> <ESC>:nohl<CR>i
+imap <F8> <ESC>:nohl<CR>a
 " F9 will save the file, if insert mode, leave insert, save, re-enter insert
 nmap <F9> :w<CR>
-imap <F9> <ESC>:w<CR>i
+imap <F9> <ESC>:w<CR>a
 
 " switch between header/source with F10
 " map <F10> :e %:p:s,.h$,.X123X,:s,.cpp$,.h,:s,.X123X$,.cpp,<CR>
