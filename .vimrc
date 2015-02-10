@@ -151,3 +151,10 @@ else
   " map <M-Down> ]s
   " map <M-Up> [s
 endif
+
+"
+" plugins
+"
+
+" ctrl-p: help finding files
+set runtimepath^=~/.vim/bundle/ctrlp.vim
