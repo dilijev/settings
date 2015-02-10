@@ -14,8 +14,11 @@ set wildmenu
 " Ignore compiled files
 set wildignore=*.o,*~,*.pyc
 
-"Always show current position
+" Always show current position
 set ruler
+
+" Enable mouse mode
+set mouse=a
 
 " Height of the command bar
 " set cmdheight=2
@@ -25,7 +28,7 @@ set hid
 
 " Configure backspace so it acts as it should act
 set backspace=eol,start,indent
-set whichwrap+=<,>,h,l
+set whichwrap+=<,>,[,]
 
 " Ignore case when searching
 set ignorecase
@@ -112,6 +115,9 @@ let g:DoxygenToolkit_authorName="John Doe <john@doe.com>"
 "
 " Enhanced keyboard mappings
 "
+
+imap jj <Esc>
+" also pressing C-c or C-[ exits from insert mode
 
 " recreate tags file with F5
 map <F5> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
