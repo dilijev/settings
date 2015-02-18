@@ -167,3 +167,8 @@ set runtimepath^=~/.vim/bundle/ctrlp.vim
 " paredit: help finding files
 set runtimepath^=~/.vim/bundle/paredit.vim
 let g:paredit_mode = 1
+" rainbow:
+let g:rainbow_active = 1 " 0 if you want to enable later using :RainbowToggle
+
+" set the leader because the default (whatever it is) doesn't seem to work
+let mapleader = ","
