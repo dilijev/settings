@@ -33,7 +33,7 @@ set whichwrap+=<,>,[,]
 " Ignore case when searching
 set ignorecase
 
-" When searching try to be smart about cases 
+" When searching try to be smart about cases
 set smartcase
 
 " Highlight search results
@@ -72,7 +72,7 @@ set tm=500
 " Description: Optimized for C/C++ development, but useful also for other things.
 " Author: Gerhard Gappmeier
 "
- 
+
 " set UTF-8 encoding
 set enc=utf-8
 set fenc=utf-8
@@ -100,7 +100,7 @@ set number
 set showmatch
 " intelligent comments
 set comments=sl:/*,mb:\ *,elx:\ */
- 
+
 " Install OmniCppComplete like described on http://vim.wikia.com/wiki/C++_code_completion
 " This offers intelligent C++ completion when typing '.', '->' or <C-o>
 " Load standard tag files
@@ -108,7 +108,7 @@ set tags+=~/.vim/tags/cpp
 set tags+=~/.vim/tags/gl
 set tags+=~/.vim/tags/sdl
 set tags+=~/.vim/tags/qt4
- 
+
 " Install DoxygenToolkit from http://www.vim.org/scripts/script.php?script_id=987
 let g:DoxygenToolkit_authorName="John Doe <john@doe.com>"
 
@@ -162,6 +162,9 @@ endif
 " plugins
 "
 
+set runtimepath^=~\vimfiles
+set runtimepath^=~\vimfiles\bundle\ctrlp.vim
+
 " ctrl-p: help finding files
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 " paredit: help finding files
@@ -172,3 +175,9 @@ let g:rainbow_active = 1 " 0 if you want to enable later using :RainbowToggle
 
 " set the leader because the default (whatever it is) doesn't seem to work
 let mapleader = ","
+
+" solarized for gvim
+if has('gui_running')
+    set background=dark
+    colorscheme solarized
+endif
