@@ -164,3 +164,6 @@ endif
 
 " ctrl-p: help finding files
 set runtimepath^=~/.vim/bundle/ctrlp.vim
+" paredit: help finding files
+set runtimepath^=~/.vim/bundle/paredit.vim
+let g:paredit_mode = 1
