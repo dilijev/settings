@@ -1,1 +1,1 @@
-set gfn=Consolas:h12:cANSI
+set gfn=DejaVu\ Sans\ Mono\ 11
