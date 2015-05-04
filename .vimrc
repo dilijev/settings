@@ -181,3 +181,7 @@ if has('gui_running')
     set background=dark
     colorscheme solarized
 endif
+
+" protect against unfortunate deletions
+inoremap <c-u> <c-g>u<c-u>
+inoremap <c-w> <c-g>u<c-w>
