@@ -182,6 +182,8 @@ if has('gui_running')
     colorscheme solarized
 endif
 
+autocmd BufWritePre * :%s/\s\+$//e
+
 " protect against unfortunate deletions
 inoremap <c-u> <c-g>u<c-u>
 inoremap <c-w> <c-g>u<c-w>
