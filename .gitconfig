@@ -2,20 +2,21 @@
 	name = Doug Ilijev
 	email = doug.ilijev@gmail.com
 [alias]
-	cfg = config --global
-	cfl = config -l
-	cfgl = config --global -l
-	undo = reset --hard HEAD
 	st = status
 	ci = commit
 	cm = commit -m
+	ca = commit -am
 	co = checkout
 	br = branch
 	ss = status -s
+	dc = diff --cached
+	undo = reset --hard HEAD
 	glog = log --graph
 	lg = log --pretty=format:\"[%h]  %ad  (%an <%ae>)%n    %s%n\"
 	gl = log --graph --pretty=format:\"[%h]  %ad  (%an <%ae>)%n    %s%n\"
-	dc = diff --cached
+	cfg = config --global
+	cfl = config -l
+	cfgl = config --global -l
 [pretty]
 	compact = [%h]  %ad  (%an <%ae>)%n    %s%n
 [format]
