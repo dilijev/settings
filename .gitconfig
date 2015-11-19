@@ -1,6 +1,7 @@
 [user]
 	name = Doug Ilijev
 	email = doug.ilijev@gmail.com
+
 [alias]
 	st = status
 	ci = commit
@@ -10,17 +11,24 @@
 	br = branch
 	ss = status -s
 	dc = diff --cached
+	fp = fetch --all -p
+	ff = merge --ff-only
+	rv = remote -v
 	undo = reset --hard HEAD
 	glog = log --graph
-	lg = log --pretty=format:\"[%h]  %ad  (%an <%ae>)%n    %s%n\"
-	gl = log --graph --pretty=format:\"[%h]  %ad  (%an <%ae>)%n    %s%n\"
+	lg = log --pretty=crisp
+	gl = log --graph --pretty=crisp
 	cfg = config --global
 	cfl = config -l
 	cfgl = config --global -l
 [pretty]
-	compact = [%h]  %ad  (%an <%ae>)%n    %s%n
+	#compact = [%h]  %ad  (%an <%ae>)%n    %s%n
+	compact = %C(auto)[ %h ]  %ad  (%C(green dim)%an <%ae>%Creset%C(auto))%n    %s%n
+	crisp = %C(auto)%h %C(green dim)%<(10,trunc)%ae%Creset%C(auto)%d %s
+	sweet = %C(auto)%h %C(green dim)%<(10,trunc)%ae%Creset%C(auto)%d %<(80,trunc)%s
 [format]
-	pretty = medium
+	pretty = compact
+
 [push]
 	default = simple
 [merge]
