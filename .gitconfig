@@ -7,24 +7,64 @@
 	ci = commit
 	cm = commit -m
 	ca = commit -am
+	amend = commit --amend --no-edit        # amend previous commit, don't change message
+	check = commit -m "[checkpoint]"        # make a quick commit to be amended later
 	co = checkout
 	br = branch
+	bv = branch -vv --no-color
+	s = status
 	ss = status -s
+	df = diff
 	dc = diff --cached
-	fp = fetch --all -p
+	dn = diff --name-only
+	dcn = diff --cached --name-only
+	dst = diff --stat
+	dcst = diff --cached --stat
+	dcsst = diff --cached --shortstat
+	sn = show --name-only
+	st = show --stat
+	sst = show --shortstat
+	msg = show --name-only --pretty=full    # get the full (multiline) message for the current commit, and files edited
+	lsf = ls-files
+	fp = fetch --all -p                     # fetch and prune all branches from all remotes
 	ff = merge --ff-only
+	ffp = "!sh -c 'git fetch origin $(git this); git merge --ff-only'"      # fetch and update only the current branch
+	mt = mergetool
+	rc = rebase --continue
+	ra = rebase --abort
+	pick = cherry-pick
+	pk = cherry-pick
 	rv = remote -v
+	sup = submodule update
 	undo = reset --hard HEAD
 	glog = log --graph
-	lg = log --pretty=crisp
+	lg = log --pretty=crispy
 	gl = log --graph --pretty=crisp
 	cfg = config --global
 	cfl = config -l
 	cfgl = config --global -l
+	hash = "!git rev-parse"
+	head = "!git rev-parse HEAD"
+	this = "!git rev-parse --abbrev-ref HEAD"   # get the name of the current branch, for scripting
+
+[alias] # scripted commands
+	## Figure out the original branch
+	tracking = !sh -c 'git rev-parse --abbrev-ref --symbolic-full-name $1@{u}'
+
+	## Show changes only in the current branch
+	dt = !git diff $(git merge-base $(git tracking) HEAD)
+
+	## Show commits only in the current branch
+	lt = !git lg $(git tracking)..
+
+	## List all commits present in this branch that are not present in the named branch
+	pending = !git lg $(git merge-base HEAD master)..HEAD
+
 [pretty]
 	#compact = [%h]  %ad  (%an <%ae>)%n    %s%n
 	compact = %C(auto)[ %h ]  %ad  (%C(green dim)%an <%ae>%Creset%C(auto))%n    %s%n
 	crisp = %C(auto)%h %C(green dim)%<(10,trunc)%ae%Creset%C(auto)%d %s
+	crispy = [ %C(auto)%h ] %ai %C(green dim)%<(10,trunc)%ae%Creset%C(auto)%d %s
 	sweet = %C(auto)%h %C(green dim)%<(10,trunc)%ae%Creset%C(auto)%d %<(80,trunc)%s
 [format]
 	pretty = compact
