@@ -16,15 +16,16 @@
 	ss = status -s
 	df = diff
 	dc = diff --cached
-	dn = diff --name-only
-	dcn = diff --cached --name-only
+	dn = diff --name-status
+	dnn = diff --name-only
+	dcn = diff --cached --name-status
 	dst = diff --stat
 	dcst = diff --cached --stat
 	dcsst = diff --cached --shortstat
-	sn = show --name-only
+	sn = show --name-status
 	st = show --stat
 	sst = show --shortstat
-	msg = show --name-only --pretty=full    # get the full (multiline) message for the current commit, and files edited
+	msg = show --name-status --pretty=full    # get the full (multiline) message for the current commit, and files edited
 	lsf = ls-files
 	fp = fetch --all -p                     # fetch and prune all branches from all remotes
 	ff = merge --ff-only
@@ -38,16 +39,19 @@
 	sup = submodule update
 	undo = reset --hard HEAD
 	glog = log --graph
-	lg = log --pretty=crispy
-	gl = log --graph --pretty=crisp
+	lg = log --pretty=crispy -10
+	gl = log --graph --pretty=crisp -10
+	lga = log --pretty=crispy
+	gla = log --graph --pretty=crisp
 	cfg = config --global
 	cfl = config -l
 	cfgl = config --global -l
 	hash = "!git rev-parse"
 	head = "!git rev-parse HEAD"
 	this = "!git rev-parse --abbrev-ref HEAD"   # get the name of the current branch, for scripting
+	branches = "for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)' refs/remotes"
 
-[alias] # scripted commands
+[alias] # experimental scripted commands
 	## Figure out the original branch
 	tracking = !sh -c 'git rev-parse --abbrev-ref --symbolic-full-name $1@{u}'
 
@@ -58,7 +62,10 @@
 	lt = !git lg $(git tracking)..
 
 	## List all commits present in this branch that are not present in the named branch
-	pending = !git lg $(git merge-base HEAD master)..HEAD
+	pending = !git lga $(git merge-base HEAD master)..HEAD
+
+	## List everyone who worked in this file or tree
+	authors = "!sh -c 'git log --pretty=%an $1 | sort | uniq' $1"
 
 [pretty]
 	#compact = [%h]  %ad  (%an <%ae>)%n    %s%n
@@ -71,5 +78,6 @@
 
 [push]
 	default = simple
+
 [merge]
 	tool = kdiff3
