@@ -80,7 +80,7 @@
 	pending = !git lga $(git merge-base HEAD master)..HEAD
 
 	## List everyone who worked in this file or tree
-	authors = "!sh -c 'git log --pretty=%an $* | sort | uniq' $*"
+	authors = "!sh -c 'git log --pretty=\"%an <%ae>\" $* | sort | uniq' $*"
 
 	gra = "!sh -c 'echo \"---- CORE ----\"; cd $(git rev-parse --show-toplevel)/core 2>/dev/nul; git gr $1; cd $(git rev-parse --show-toplevel)/..; echo \"\n---- FULL ----\"; git gr $1;' $1"
 
