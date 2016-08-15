@@ -89,7 +89,7 @@
 	compact = %C(auto)[ %h ]  %ad  (%C(green dim)%an <%ae>%Creset%C(auto))%n    %s%n
 	crisp = %C(auto)%h %C(green dim)%<(10,trunc)%ae%Creset%C(auto)%d %s
 	crispy = [ %C(auto)%h ] %ai%x08%x08%x08%x08%x08%x08%x08%x08%x08 %C(green dim)%<(10,trunc)%ae%Creset%C(auto)%d %s
-	crispy-nocolor = [ %h ] %ai%x08%x08%x08%x08%x08%x08%x08%x08%x08 | %<(10,trunc)%ae |%d %s
+	crispy-nocolor = [ %h ] %ai | %<(10,trunc)%ae | %s
 	sweet = %C(auto)%h %C(green dim)%<(10,trunc)%ae%Creset%C(auto)%d %<(80,trunc)%s
 [format]
 	pretty = compact
