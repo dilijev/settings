@@ -21,6 +21,7 @@
 	dnn = diff --name-only
 	dnn1 = diff --name-only HEAD~1
 	dcn = diff --cached --name-status
+	dcnn = diff --cached --name-only
 	dst = diff --stat
 	dcst = diff --cached --stat
 	dcsst = diff --cached --shortstat
@@ -49,6 +50,7 @@
 	lfa = log --pretty=crispy --first-parent
 	gl = log --graph --pretty=crisp -10
 	gla = log --graph --pretty=crisp
+	cf = config
 	cfg = config --global
 	cfl = config -l
 	cfgl = config --global -l
@@ -81,19 +83,19 @@
 
 	## List everyone who worked in this file or tree
 	authors = "!sh -c 'git log --pretty=\"%an <%ae>\" $* | sort | uniq' $*"
-
-	gra = "!sh -c 'echo \"---- CORE ----\"; cd $(git rev-parse --show-toplevel)/core 2>/dev/nul; git gr $1; cd $(git rev-parse --show-toplevel)/..; echo \"\n---- FULL ----\"; git gr $1;' $1"
+	authors-name-only = "!sh -c 'git log --pretty=\"%an\" $* | sort | uniq' $*"
 
 [pretty]
 	#compact = [%h]  %ad  (%an <%ae>)%n    %s%n
 	compact = %C(auto)[ %h ]  %ad  (%C(green dim)%an <%ae>%Creset%C(auto))%n    %s%n
 	crisp = %C(auto)%h %C(green dim)%<(10,trunc)%ae%Creset%C(auto)%d %s
-	crispy = [ %C(auto)%h ] %ai%x08%x08%x08%x08%x08%x08%x08%x08%x08 %C(green dim)%<(10,trunc)%ae%Creset%C(auto)%d %s
-	crispy-nocolor = [ %h ] %ai | %<(10,trunc)%ae | %s
-	sweet = %C(auto)%h %C(green dim)%<(10,trunc)%ae%Creset%C(auto)%d %<(80,trunc)%s
+	crispy = [ %C(auto)%h ] %ad %C(green dim)%<(10,trunc)%ae%Creset%C(auto)%d %s
+	crispy-nocolor = [ %h ] %ad | %<(10,trunc)%ae | %s                                      # display crispy with no color formatting (to make it easier to read when saved to a file)
+	sweet = %C(auto)%h %C(green dim)%<(10,trunc)%ae%Creset%C(auto)%d %<(80,trunc)%s         # same as crisp with truncation of the message to 80 char
 [format]
 	pretty = compact
-
+[log]
+	date = format:"%Y-%m-%d %H:%M"
 [push]
 	default = simple
 
