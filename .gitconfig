@@ -15,6 +15,8 @@
 	bv = branch -vv --no-color
 	s = status
 	ss = status -s
+	changed = "!git diff $1~1 $1 #"
+	changes = "!git diff --stat $1~1 $1 #"
 	df = diff
 	dc = diff --cached
 	dn = diff --name-status
@@ -66,7 +68,7 @@
 
 	# take the result of $(git tracking) and use sed to find just the name of the remote
 	# sed -e "s/\\/.*//" # match a literal '/' to the end of the line and replace with nothing
-	tracking-remote = !sh -c 'git rev-parse --abbrev-ref --symbolic-full-name $1@{u} | sed -e s/\\\\\\\\/.*//' $1
+	tracking-remote = !sh -c 'git rev-parse --abbrev-ref --symbolic-full-name $1@{u} | sed -e s/[/].*//' $1
 	tr = !git tracking-remote
 
 	# fetch this branch from the tracking-remote, and then fast-forward the local branch
