@@ -160,3 +160,6 @@ eval "$(fasd --init auto)"
 #export PATH=${PATH}:~/bin/ahead-v2013.03.20/build/bin
 
 export LC_ALL="C" # collate dotfiles before normal files in ls
+
+export NVM_DIR="/home/doilij/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
