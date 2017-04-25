@@ -92,8 +92,10 @@
 	compact = %C(auto)[ %h ]  %ad  (%C(green dim)%an <%ae>%Creset%C(auto))%n    %s%n
 	crisp = %C(auto)%h %C(green dim)%<(10,trunc)%ae%Creset%C(auto)%d %s
 	crispy = [ %C(auto)%h ] %ad %C(green dim)%<(10,trunc)%ae%Creset%C(auto)%d %s
-	crispy-nocolor = [ %h ] %ad | %<(10,trunc)%ae | %s                                      # display crispy with no color formatting (to make it easier to read when saved to a file)
+	crispy-nc = [ %h ] %ad | %<(10,trunc)%ae | %s                                           # display crispy with no color formatting (to make it easier to read when saved to a file)
 	sweet = %C(auto)%h %C(green dim)%<(10,trunc)%ae%Creset%C(auto)%d %<(80,trunc)%s         # same as crisp with truncation of the message to 80 char
+	brief = %C(auto)%h | %ad | %C(green dim)%<(7,trunc)%ae%Creset%C(auto) %<(40,trunc)%s    # (80 columns) less emphasis on commit message; more on date, author, PR number
+	brief-nc = %h | %ad | %<(7,trunc)%ae %<(40,trunc)%s                                     # (80 columns) less emphasis on commit message; more on date, author, PR number
 [format]
 	pretty = compact
 [log]
