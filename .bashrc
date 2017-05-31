@@ -126,9 +126,9 @@ function __git_prompt {
 	if [ $? -eq 0 ]; then
  		git status | grep "nothing to commit" &>/dev/null
 		if [ "$?" -eq "0" ]; then
-			echo $(__git_ps1 "${GREEN}(%s)") | sed -e "s/\\\\\\[//" | sed -e "s/\\\\\\]//" 
+			echo $(__git_ps1 "${GREEN}(%s)") | sed -e "s/\\\\\\[//" | sed -e "s/\\\\\\]//"
 		else
-			echo $(__git_ps1 "${RED}(%s)") | sed -e "s/\\\\\\[//" | sed -e "s/\\\\\\]//" 
+			echo $(__git_ps1 "${RED}(%s)") | sed -e "s/\\\\\\[//" | sed -e "s/\\\\\\]//"
 		fi
 	fi
 }
@@ -148,6 +148,7 @@ PS1="${RED}\t ${GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_
 #PS1="${RED}\t ${GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLUE}\w${NORMAL}\$(__git_spacer)\$(__git_prompt)${NORMAL}\$ "
 
 export PS1
+export PATH=${PATH}:~/bin
 
 
 # FASD
