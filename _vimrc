@@ -120,6 +120,7 @@ let g:DoxygenToolkit_authorName="John Doe <john@doe.com>"
 " escape from insert mode
 " also pressing C-c or C-[ exits from insert mode
 imap jj <Esc>
+
 imap kj <Esc>
 imap jk <Esc>
 " go to beginning of line
@@ -199,8 +200,6 @@ autocmd ColorScheme * highlight ExtraWhitespace ctermbg=darkgreen guibg=darkgree
 "autocmd ColorScheme * highlight Tabs ctermbg=darkred guibg=darkred
 
 command Trim :%s/\s\+$//e
-command Chakra :cd c:\dev\Chakra
-command ChakraCore :cd C:\dev\Chakra\Core
 
 "autocmd BufWritePre * :%s/\s\+$//e
 "autocmd BufWritePre * :retab

@@ -86,6 +86,7 @@ set smartindent
 " configure tabwidth and insert spaces instead of tabs
 set shiftwidth=4     " indent also with 4 spaces
 set softtabstop=4
+set tabstop=4        " display tab characters as 4 spaces
 set expandtab        " expand tabs to spaces
 " wrap lines at 120 chars. 80 is somewaht antiquated with nowadays displays.
 " set textwidth=120
@@ -116,8 +117,22 @@ let g:DoxygenToolkit_authorName="John Doe <john@doe.com>"
 " Enhanced keyboard mappings
 "
 
-imap jj <Esc>
+" escape from insert mode
 " also pressing C-c or C-[ exits from insert mode
+imap jj <Esc>
+
+imap kj <Esc>
+imap jk <Esc>
+" go to beginning of line
+imap lh <Esc>I
+" go to end of line
+imap hl <Esc>A
+
+" navigation
+nmap <C-Tab> :b#<CR>
+imap <C-Tab> <Esc>:b#<CR>i
+nmap <M-Left> <C-o>
+nmap <M-Right> <C-i>
 
 " recreate tags file with F5
 map <F5> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
@@ -176,6 +191,19 @@ let g:rainbow_active = 1 " 0 if you want to enable later using :RainbowToggle
 " set the leader because the default (whatever it is) doesn't seem to work
 let mapleader = ","
 
+highlight ExtraWhitespace ctermbg=darkgreen guibg=darkgreen
+match ExtraWhitespace /\v(\s+$)|(^(\s+)?(\t+)(\s+)?\ze\w)/
+autocmd ColorScheme * highlight ExtraWhitespace ctermbg=darkgreen guibg=darkgreen
+
+"highlight Tabs ctermbg=darkred guibg=darkred
+"match Tabs /\t+/
+"autocmd ColorScheme * highlight Tabs ctermbg=darkred guibg=darkred
+
+command Trim :%s/\s\+$//e
+
+"autocmd BufWritePre * :%s/\s\+$//e
+"autocmd BufWritePre * :retab
+
 set background=dark
 if has('gui_running')
     " solarized for gvim
@@ -183,8 +211,6 @@ if has('gui_running')
 else
     colorscheme monokai
 endif
-
-autocmd BufWritePre * :%s/\s\+$//e
 
 " protect against unfortunate deletions
 inoremap <c-u> <c-g>u<c-u>
