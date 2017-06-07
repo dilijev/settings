@@ -30,42 +30,126 @@ if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
     debian_chroot=$(cat /etc/debian_chroot)
 fi
 
+
+# ===============
+# PROMPT TEMPLATES
+# ================
+
+source ~/.bash_colors
+
+#
+# Original prompts
+#
+
+PS1_NOCOLOR="${debian_chroot:+($debian_chroot)}\u@\h:\w\$ "
+#PS1_NOCOLOR="\t ${debian_chroot:+($debian_chroot)}\u@\h:\w\$ "    # with time
+#PS1_COLOR='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+
+#
+# Custom prompts
+#
+
+function __git_spacer {
+    git branch &>/dev/null
+    if [ $? -eq 0 ]; then
+        echo " "
+    fi
+}
+
+function __git_prompt {
+    git branch &>/dev/null
+    if [ $? -eq 0 ]; then
+        git status | grep "nothing to commit" &>/dev/null
+        if [ "$?" -eq "0" ]; then
+            echo $(__git_ps1 "${GREEN}(%s)") | sed -e "s/\\\\\\[//" | sed -e "s/\\\\\\]//"
+        else
+            echo $(__git_ps1 "${RED}(%s)") | sed -e "s/\\\\\\[//" | sed -e "s/\\\\\\]//"
+        fi
+    fi
+}
+
+#PS1="${RED}\t ${GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${CYAN}\w${NORMAL}\$ "
+#PS1="${RED}\t ${BRIGHT_GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLUE}\w${NORMAL}\$ "
+#PS1="${BRIGHT_RED}\t ${BRIGHT_GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLUE}\w${NORMAL}\$ "
+
+#PS1="${RED}\t ${GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL} : \w ${GREEN}\$${NORMAL} "
+#PS1="\t ${GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${CYAN}\w${NORMAL}\$ "
+#PS1="\t ${GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${CYAN}\w${NORMAL}\$ "
+#PS1="\t ${BRIGHT_GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLACK}\w${NORMAL}\$ "
+#PS1="${RED}\t ${BRIGHT_GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLACK}\w${NORMAL}\$ "
+#PS1="${RED}\t ${BRIGHT_GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLUE}\w${NORMAL}\$ "
+
+#PS1="${RED}\t ${GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLUE}\w${NORMAL}\$(__git_spacer)\$(__git_prompt)${NORMAL}\$ "
+
+# TODO debug this: consider using `PROMPT_COMMAND=some_user_function`
+function __command_status {
+    EXIT_CODE=$?
+    if [ $EXIT_CODE -eq 0 ]; then
+        echo "[$EXIT_CODE]"
+    else
+        echo "${YELLOW}[$EXIT_CODE]${NORMAL}"
+    fi
+}
+
+#PS1_COLOR="\$(echo \$(__command_status)) ${RED}\t ${GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLUE}\w${NORMAL}\$ "
+
+PS1_COLOR="[\$?] ${RED}\t ${GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLUE}\w${NORMAL}\$ "
+
+
+# ======
+# PROMPT
+# ======
+
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
-    xterm-color) color_prompt=yes;;
+    xterm-color)
+        color_prompt=yes
+        ;;
 esac
 
-# uncomment for a colored prompt, if the terminal has the capability; turned
-# off by default to not distract the user: the focus in a terminal window
-# should be on the output of commands, not on the prompt
-#force_color_prompt=yes
+# uncomment for a colored prompt, if the terminal has the capability
+force_color_prompt=yes
 
 if [ -n "$force_color_prompt" ]; then
     if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-	# We have color support; assume it's compliant with Ecma-48
-	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-	# a case would tend to support setf rather than setaf.)
-	color_prompt=yes
+        # We have color support; assume it's compliant with Ecma-48
+        # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+        # a case would tend to support setf rather than setaf.)
+        color_prompt=yes
     else
-	color_prompt=
+        color_prompt=
     fi
 fi
 
-if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+if [ -n "$force_nocolor_prompt" ]; then
+    color_prompt=
 fi
-unset color_prompt force_color_prompt
+
+
+if [ "$color_prompt" = yes ]; then
+    # echo "Using PS1_COLOR"
+    PS1=$PS1_COLOR
+else
+    # echo "Using PS1_NOCOLOR"
+    PS1=$PS1_NOCOLOR
+fi
+unset color_prompt force_color_prompt force_nocolor_prompt
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    ;;
-*)
-    ;;
+    xterm*|rxvt*)
+        PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+        ;;
+    *)
+        ;;
 esac
+
+export PS1
+
+
+# =======
+# ALIASES
+# =======
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
@@ -84,11 +168,12 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
+export LC_ALL="C" # collate dotfiles before normal files in ls
+
 # Alias definitions.
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
-
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
@@ -100,67 +185,15 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
-
-source ~/.bash_colors
-
-#
-# Color-free prompts
-#
-
-#PS1="${debian_chroot:+($debian_chroot)}\u@\h:\w\$ "       # original
-#PS1="\t ${debian_chroot:+($debian_chroot)}\u@\h:\w\$ "   # with time
-
-#
-# Colorful prompts
-#
-
-function __git_spacer {
-	git branch &>/dev/null
-	if [ $? -eq 0 ]; then
-		echo " "
-	fi
-}
-
-function __git_prompt {
-	git branch &>/dev/null
-	if [ $? -eq 0 ]; then
- 		git status | grep "nothing to commit" &>/dev/null
-		if [ "$?" -eq "0" ]; then
-			echo $(__git_ps1 "${GREEN}(%s)") | sed -e "s/\\\\\\[//" | sed -e "s/\\\\\\]//"
-		else
-			echo $(__git_ps1 "${RED}(%s)") | sed -e "s/\\\\\\[//" | sed -e "s/\\\\\\]//"
-		fi
-	fi
-}
-
-#PS1="${RED}\t ${GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${CYAN}\w${NORMAL}\$ "
-#PS1="${RED}\t ${BRIGHT_GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLUE}\w${NORMAL}\$ "
-#PS1="${BRIGHT_RED}\t ${BRIGHT_GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLUE}\w${NORMAL}\$ "
-
-#PS1="${RED}\t ${GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL} : \w ${GREEN}\$${NORMAL} "
-#PS1="\t ${GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${CYAN}\w${NORMAL}\$ "
-#PS1="\t ${GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${CYAN}\w${NORMAL}\$ "
-#PS1="\t ${BRIGHT_GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLACK}\w${NORMAL}\$ "
-#PS1="${RED}\t ${BRIGHT_GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLACK}\w${NORMAL}\$ "
-#PS1="${RED}\t ${BRIGHT_GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLUE}\w${NORMAL}\$ "
-
-PS1="${RED}\t ${GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLUE}\w${NORMAL}\$ "
-#PS1="${RED}\t ${GREEN}${debian_chroot:+($debian_chroot)}\u@\h${NORMAL}:${BRIGHT_BLUE}\w${NORMAL}\$(__git_spacer)\$(__git_prompt)${NORMAL}\$ "
-
-export PS1
 export PATH=${PATH}:~/bin
+
+export NVM_DIR="/home/doilij/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 
 
 # FASD
 
-eval "$(fasd --init auto)"
-
-
-# CS 392F
-#export CLASSPATH=.:~/bin/mdelite/MDELite2.3.jar
-#export PATH=${PATH}:~/bin/ahead-v2013.03.20/build/bin
-
-export LC_ALL="C" # collate dotfiles before normal files in ls
-
-export NVM_DIR="/home/doilij/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+# for some reason this slows down printing the prompt under WSL
+if [[ ( ! `cat /proc/version` =~ Microsoft ) || ( -n "${FORCE_FASD}" ) ]]; then
+    eval "$(fasd --init auto)"
+fi
