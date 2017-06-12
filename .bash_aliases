@@ -14,6 +14,7 @@ alias alrc='source ~/.bashrc'
 alias ea='vim ~/.bashrc'
 alias sa='source ~/.bashrc'
 alias fasd-init='eval "$(fasd --init auto)"'
+alias nvm-init='. "$NVM_DIR/nvm.sh"'
 
 alias exe='chmod 755'
 alias go='nautilus'
@@ -23,3 +24,5 @@ alias cls='clear'
 alias clc='clear'
 alias up='cd ..'
 alias u='up'
+
+alias chcc='cd /mnt/e/d/ChakraCore'
