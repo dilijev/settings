@@ -14,8 +14,12 @@
 	bv = branch -vv --no-color
 	s = status
 	ss = status -s
+	sf = status --no-renames --no-breaks -uno   # f for "fast"
+	su = status --no-renames --no-breaks -uno   # u for -uno (intent of which is "fast")
 	changed = "!git diff $1~1 $1 #"
 	changes = "!git diff --stat $1~1 $1 #"
+	changedw = "!git diff -w $1~1 $1 #"
+	changesw = "!git diff -w --stat $1~1 $1 #"
 	df = diff
 	dc = diff --cached
 	dn = diff --name-status
@@ -30,7 +34,7 @@
 	snn = show --name-only
 	st = show --stat
 	sst = show --shortstat
-	msg = show --name-status --pretty=full      # get the full (multiline) message for the current commit, and files changed
+	msg = show --name-status --pretty=fuller    # get the full (multiline) message (with dates) for the current commit, and files changed
 	lsf = ls-files
 	fp = fetch --all -p                         # fetch and prune all branches from all remotes
 	ff = merge --ff-only
@@ -45,18 +49,21 @@
 	sup = submodule update
 	undo = reset --hard HEAD
 	glog = log --graph
-	lg = log --pretty=crispy -10
-	lga = log --pretty=crispy
+	lg = log --topo-order --pretty=crispy -10
+	lga = log --topo-order --pretty=crispy
 	lf = log --pretty=crispy --first-parent -10
+	lfc = log --pretty=crispy-cdate --first-parent -10
 	lfa = log --pretty=crispy --first-parent
-	gl = log --graph --pretty=crisp -10
-	gla = log --graph --pretty=crisp
+	lfca = log --pretty=crispy-cdate --first-parent
+	gl = log --graph --pretty=crispy -10
+	gla = log --graph --pretty=crispy
 	cf = config
 	cfg = config --global
 	cfl = config -l
 	cfgl = config --global -l
 	hash = rev-parse
 	head = rev-parse HEAD
+	hh = rev-parse --short
 	this = rev-parse --abbrev-ref HEAD          # get the name of the current branch, for scripting
 	has = branch -a --contains                  # which branches contain the current commit
 	branches = "for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)' refs/remotes"
@@ -70,11 +77,15 @@
 
 	# take the result of $(git tracking) and use sed to find just the name of the remote
 	# sed -e "s/\\/.*//" # match a literal '/' to the end of the line and replace with nothing
-	tracking-remote = !sh -c 'git rev-parse --abbrev-ref --symbolic-full-name $1@{u} | sed -e s/[/].*//' $1
+	tracking-remote = !sh -c 'git tracking | sed -e s/[/].*//' $1
 	tr = !git tracking-remote
 
+	tracking-remote-branch = "!sh -c 'git tracking | sed -Ee \"s/[^/]*[/](.*)/\\1/\"' #" $1
+	tb = !git tracking-remote-branch
+
 	# fetch this branch from the tracking-remote, and then fast-forward the local branch
-	ffp = "!sh -c 'git fetch $(git tracking-remote) $(git this); git merge --ff-only'"
+	# ffp = "!sh -c 'git fetch $(git tracking-remote) $(git this); git merge --ff-only'"
+	ffp = "!sh -c 'git fetch $(git tracking-remote) $(git tracking-remote-branch); git merge --ff-only'"
 
 	## Show changes only in the current branch
 	dt = !git diff $(git merge-base $(git tracking) HEAD)
@@ -89,11 +100,14 @@
 	authors = "!sh -c 'git log --pretty=\"%an <%ae>\" $* | sort | uniq' $*"
 	authors-name-only = "!sh -c 'git log --pretty=\"%an\" $* | sort | uniq' $*"
 
+	filetypes = "!sh -c 'git ls-files | sed -Ee \"s/.*([./][^/.]*)$/\\1/\" | sort | uniq' $*"
+
 [pretty]
 	#compact = [%h]  %ad  (%an <%ae>)%n    %s%n
 	compact = %C(auto)[ %h ]  %ad  (%C(green dim)%an <%ae>%Creset%C(auto))%n    %s%n
 	crisp = %C(auto)%h %C(green dim)%<(10,trunc)%ae%Creset%C(auto)%d %s
 	crispy = [ %C(auto)%h ] %ad %C(green dim)%<(10,trunc)%ae%Creset%C(auto)%d %s
+	crispy-cdate = [ %C(auto)%h ] %cd %C(green dim)%<(10,trunc)%ae%Creset%C(auto)%d %s
 	crispy-nc = [ %h ] %ad | %<(10,trunc)%ae | %s                                           # display crispy with no color formatting (to make it easier to read when saved to a file)
 	sweet = %C(auto)%h %C(green dim)%<(10,trunc)%ae%Creset%C(auto)%d %<(80,trunc)%s         # same as crisp with truncation of the message to 80 char
 	brief = %C(auto)%h | %ad | %C(green dim)%<(7,trunc)%ae%Creset%C(auto) %<(40,trunc)%s    # (80 columns) less emphasis on commit message; more on date, author, PR number
