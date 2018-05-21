@@ -9,13 +9,16 @@
 	au = add -u
 	amend = commit --amend --no-edit            # amend previous commit, don't change message
 	check = commit -m "[checkpoint]"            # make a quick commit to be amended later
+	wip   = commit -m "[wip]"                   # make a quick commit to be amended later
 	co = checkout
 	br = branch
 	bv = branch -vv --no-color
-	s = status
-	ss = status -s
-	sf = status --no-renames --no-breaks -uno   # f for "fast"
-	su = status --no-renames --no-breaks -uno   # u for -uno (intent of which is "fast")
+	sa  = status                                                        # a for all calculations
+	ssa = status -s                                                     # a for all calculations (short)
+	ss  = status -s --no-renames --no-breaks -uno --no-ahead-behind     # default fast (short)
+	s   = status    --no-renames --no-breaks -uno --no-ahead-behind     # default fast
+	sf  = status    --no-renames --no-breaks -uno --no-ahead-behind     # f for "fast"
+	su  = status    --no-renames --no-breaks -uno --no-ahead-behind     # u for -uno (intent of which is "fast")
 	changed = "!git diff $1~1 $1 #"
 	changes = "!git diff --stat $1~1 $1 #"
 	changedw = "!git diff -w $1~1 $1 #"
@@ -34,9 +37,9 @@
 	snn = show --name-only
 	st = show --stat
 	sst = show --shortstat
-	msg = show --name-status --pretty=fuller    # get the full (multiline) message (with dates) for the current commit, and files changed
+	msg = show --name-status --pretty=fuller        # get the full (multiline) message (with dates) for the current commit, and files changed
 	lsf = ls-files
-	fp = fetch --all -p                         # fetch and prune all branches from all remotes
+	fp = fetch --all -p                             # fetch and prune all branches from all remotes
 	ff = merge --ff-only
 	fg = "!git lsf | grep --color=auto -i $* #"     # "file grep"
 	gr = grep -i -n --color=auto
@@ -66,7 +69,11 @@
 	hh = rev-parse --short
 	this = rev-parse --abbrev-ref HEAD          # get the name of the current branch, for scripting
 	has = branch -a --contains                  # which branches contain the current commit
-	branches = "for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)' refs/remotes"
+	relhas = "!sh -c 'git branch -a --contains $1 | grep -P release\\|[/]master #' $*"                  # which branches contain the current commit
+	hasrel = !git relhas $*
+	context = "!git br | sed -e 's/*/ /' | xargs -I % git lf -1 %"
+	branches = "for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)'"
+	branches-remote = "for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)' refs/remotes"
 	ignore = update-index --assume-unchanged
 	unignore = update-index --no-assume-unchanged
 	ignored = !sh -c 'git ls-files -v | grep -E "^[a-z]"'       # ls-files -v uses lowercase letters for files marked --assume-unchanged
