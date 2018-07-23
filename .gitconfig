@@ -51,15 +51,18 @@
 	rv = remote -v
 	sup = submodule update
 	undo = reset --hard HEAD
-	glog = log --graph
-	lg = log --topo-order --pretty=crispy -10
-	lga = log --topo-order --pretty=crispy
-	lf = log --pretty=crispy --first-parent -10
-	lfc = log --pretty=crispy-cdate --first-parent -10
-	lfa = log --pretty=crispy --first-parent
-	lfca = log --pretty=crispy-cdate --first-parent
-	gl = log --graph --pretty=crispy -10
-	gla = log --graph --pretty=crispy
+	base = !git merge-base HEAD $1
+
+	glog = log --graph --date=iso
+	lg = log --pretty=crispy --date=iso -10 --topo-order
+	lga = log --pretty=crispy --date=iso --topo-order
+	lf = log --pretty=crispy --date=iso -10 --first-parent
+	lfa = log --pretty=crispy --date=iso --first-parent
+	lfc = log --pretty=crispy-cdate --date=iso --first-parent -10
+	lfca = log --pretty=crispy-cdate --date=iso --first-parent
+	gl = log --graph --pretty=crispy --date=iso -10
+	gla = log --graph --pretty=crispy --date=iso
+
 	cf = config
 	cfg = config --global
 	cfl = config -l
@@ -71,9 +74,11 @@
 	has = branch -a --contains                  # which branches contain the current commit
 	relhas = "!sh -c 'git branch -a --contains $1 | grep -P release\\|[/]master #' $*"                  # which branches contain the current commit
 	hasrel = !git relhas $*
-	context = "!git br | sed -e 's/*/ /' | xargs -I % git lf -1 %"
+	context =   "!git br | sed -e 's/*/ /' | xargs -I % git lf -1 %"
+	nocontext = "!git br | sed -e 's/*/ /' | xargs -I % git lf -1 % | grep -vP 'origin[/]|master' | grep --color '[(].*[)]'"
 	branches = "for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)'"
 	branches-remote = "for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)' refs/remotes"
+	branches-local = "!git for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:iso8601)%09(%(authordate:relative))%09%(refname:short)' refs/heads | grep -vP 'master|released?[/]'"
 	ignore = update-index --assume-unchanged
 	unignore = update-index --no-assume-unchanged
 	ignored = !sh -c 'git ls-files -v | grep -E "^[a-z]"'       # ls-files -v uses lowercase letters for files marked --assume-unchanged
@@ -110,21 +115,25 @@
 	filetypes = "!sh -c 'git ls-files | sed -Ee \"s/.*([./][^/.]*)$/\\1/\" | sort | uniq' $*"
 
 [pretty]
-	#compact = [%h]  %ad  (%an <%ae>)%n    %s%n
-	compact = %C(auto)[ %h ]  %ad  (%C(green dim)%an <%ae>%Creset%C(auto))%n    %s%n
-	crisp = %C(auto)%h %C(green dim)%<(10,trunc)%ae%Creset%C(auto)%d %s
-	crispy = [ %C(auto)%h ] %ad %C(green dim)%<(10,trunc)%ae%Creset%C(auto)%d %s
-	crispy-cdate = [ %C(auto)%h ] %cd %C(green dim)%<(10,trunc)%ae%Creset%C(auto)%d %s
-	crispy-nc = [ %h ] %ad | %<(10,trunc)%ae | %s                                           # display crispy with no color formatting (to make it easier to read when saved to a file)
-	sweet = %C(auto)%h %C(green dim)%<(10,trunc)%ae%Creset%C(auto)%d %<(80,trunc)%s         # same as crisp with truncation of the message to 80 char
-	brief = %C(auto)%h | %ad | %C(green dim)%<(7,trunc)%ae%Creset%C(auto) %<(40,trunc)%s    # (80 columns) less emphasis on commit message; more on date, author, PR number
-	brief-nc = %h | %ad | %<(7,trunc)%ae %<(40,trunc)%s                                     # (80 columns) less emphasis on commit message; more on date, author, PR number
-[format]
-	pretty = compact
-[log]
-	date = format:"%Y-%m-%d %H:%M"
+	compact      = %C(auto)[ %h ]  %ad  (%C(green dim)%an <%ae>%Creset%C(auto))%n    %s%n
+	compact-nc   = [%h]  %ad  (%an <%ae>)%n    %s%n
+	crisp        = %C(auto)%h %C(green dim)%<(10,trunc)%ae%Creset%C(auto)%d %s
+	crispy       = [ %C(auto)%h ] %ad %C(green dim)%<(10,trunc)%ae%Creset%C(auto)%d %s
+	crispy-cdate = [ %C(auto)%h ] %ad |C: %cd %C(green dim)%<(10,trunc)%ae%Creset %C(green dim)%<(10,trunc)|C:%ce%Creset%C(auto)%d %s
+	crispy-nc    = [ %h ] %ad | %<(10,trunc)%ae | %s                                               # display crispy with no color formatting (to make it easier to read when saved to a file)
+	sweet        = %C(auto)%h %C(green dim)%<(10,trunc)%ae%Creset%C(auto)%d %<(80,trunc)%s         # same as crisp with truncation of the message to 80 char
+	brief        = %C(auto)%h | %ad | %C(green dim)%<(7,trunc)%ae%Creset%C(auto) %<(40,trunc)%s    # (80 columns) less emphasis on commit message; more on date, author, PR number
+	brief-nc     = %h | %ad | %<(7,trunc)%ae %<(40,trunc)%s                                        # (80 columns) less emphasis on commit message; more on date, author, PR number
 [push]
 	default = simple
+
+# stuff that affects output of many git commands, possibly unexpectedly, best to leave it out in case this config is ported to another machine, and set these values on aliased commands instead
+[format]
+	#pretty = compact
+[log]
+	#date = format:"%Y-%m-%d %H:%M"         # like ISO but no seconds or timezone
+	#date = format:"%Y-%m-%d %H:%M %z"      # like ISO but no seconds (includes timezone %z")
+	#date = iso
 
 [merge]
 	tool = kdiff3
