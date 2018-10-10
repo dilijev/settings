@@ -176,10 +176,12 @@ let g:rainbow_active = 1 " 0 if you want to enable later using :RainbowToggle
 " set the leader because the default (whatever it is) doesn't seem to work
 let mapleader = ","
 
-" solarized for gvim
+set background=dark
 if has('gui_running')
-    set background=dark
+    " solarized for gvim
     colorscheme solarized
+else
+    colorscheme monokai
 endif
 
 autocmd BufWritePre * :%s/\s\+$//e
