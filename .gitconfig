@@ -3,7 +3,6 @@
 	email = doug.ilijev@gmail.com
 
 [alias]
-	st = status
 	ci = commit
 	cm = commit -m
 	ca = commit -am
@@ -61,6 +60,9 @@
 	this = rev-parse --abbrev-ref HEAD          # get the name of the current branch, for scripting
 	has = branch -a --contains                  # which branches contain the current commit
 	branches = "for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)' refs/remotes"
+	ignore = update-index --assume-unchanged
+	unignore = update-index --no-assume-unchanged
+	ignored = !sh -c 'git ls-files -v | grep -E "^[a-z]"'       # ls-files -v uses lowercase letters for files marked --assume-unchanged
 
 [alias] # experimental scripted commands
 	## Figure out the original branch
@@ -92,8 +94,10 @@
 	compact = %C(auto)[ %h ]  %ad  (%C(green dim)%an <%ae>%Creset%C(auto))%n    %s%n
 	crisp = %C(auto)%h %C(green dim)%<(10,trunc)%ae%Creset%C(auto)%d %s
 	crispy = [ %C(auto)%h ] %ad %C(green dim)%<(10,trunc)%ae%Creset%C(auto)%d %s
-	crispy-nocolor = [ %h ] %ad | %<(10,trunc)%ae | %s                                      # display crispy with no color formatting (to make it easier to read when saved to a file)
+	crispy-nc = [ %h ] %ad | %<(10,trunc)%ae | %s                                           # display crispy with no color formatting (to make it easier to read when saved to a file)
 	sweet = %C(auto)%h %C(green dim)%<(10,trunc)%ae%Creset%C(auto)%d %<(80,trunc)%s         # same as crisp with truncation of the message to 80 char
+	brief = %C(auto)%h | %ad | %C(green dim)%<(7,trunc)%ae%Creset%C(auto) %<(40,trunc)%s    # (80 columns) less emphasis on commit message; more on date, author, PR number
+	brief-nc = %h | %ad | %<(7,trunc)%ae %<(40,trunc)%s                                     # (80 columns) less emphasis on commit message; more on date, author, PR number
 [format]
 	pretty = compact
 [log]
