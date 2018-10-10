@@ -141,3 +141,5 @@
 
 [merge]
 	tool = kdiff3
+[credential]
+	helper = store
