@@ -15,14 +15,10 @@
 	bv = branch -vv --no-color
 	sa  = status                                                        # a for all calculations
 	ssa = status -s                                                     # a for all calculations (short)
-    #ss  = status -s --no-renames --no-breaks -uno --no-ahead-behind     # default fast (short)
-    #s   = status    --no-renames --no-breaks -uno --no-ahead-behind     # default fast
-    #sf  = status    --no-renames --no-breaks -uno --no-ahead-behind     # f for "fast"
-    #su  = status    --no-renames --no-breaks -uno --no-ahead-behind     # u for -uno (intent of which is "fast")
 	ss  = status -s --no-renames -uno --no-ahead-behind                 # default fast (short)
 	s   = status    --no-renames -uno --no-ahead-behind                 # default fast
-	sf  = status    --no-renames -uno --no-ahead-behind                 # f for "fast"
 	su  = status    --no-renames -uno --no-ahead-behind                 # u for -uno (intent of which is "fast")
+	sf  = status    --no-renames -uno --no-ahead-behind --no-breaks     # f for "fast"
 	changed = "!git diff $1~1 $1 #"
 	changes = "!git diff --stat $1~1 $1 #"
 	changedw = "!git diff -w $1~1 $1 #"
@@ -57,15 +53,15 @@
 	undo = reset --hard HEAD
 	base = !git merge-base HEAD $1
 
-	glog = log --graph --date=iso
-	lg = log --pretty=crispy --date=iso -10 --topo-order
-	lga = log --pretty=crispy --date=iso --topo-order
-	lf = log --pretty=crispy --date=iso -10 --first-parent
-	lfa = log --pretty=crispy --date=iso --first-parent
-	lfc = log --pretty=crispy-cdate --date=iso --first-parent -10
-	lfca = log --pretty=crispy-cdate --date=iso --first-parent
-	gl = log --graph --pretty=crispy --date=iso -10
-	gla = log --graph --pretty=crispy --date=iso
+	glog = log --graph --date=iso-local
+	lg = log --pretty=crispy --date=iso-local -10 --topo-order
+	lga = log --pretty=crispy --date=iso-local --topo-order
+	lf = log --pretty=crispy --date=iso-local -10 --first-parent
+	lfa = log --pretty=crispy --date=iso-local --first-parent
+	lfc = log --pretty=crispy-cdate --date=iso-local --first-parent -10
+	lfca = log --pretty=crispy-cdate --date=iso-local --first-parent
+	gl = log --graph --pretty=crispy --date=iso-local -10
+	gla = log --graph --pretty=crispy --date=iso-local
 
 	cf = config
 	cfg = config --global
@@ -122,10 +118,10 @@
 	compact      = %C(auto)[ %h ]  %ad  (%C(green dim)%an <%ae>%Creset%C(auto))%n    %s%n
 	compact-nc   = [%h]  %ad  (%an <%ae>)%n    %s%n
 	crisp        = %C(auto)%h %C(green dim)%<(10,trunc)%ae%Creset%C(auto)%d %s
-	crispy       = [ %C(auto)%h ] %ad %C(green dim)%<(10,trunc)%ae%Creset%C(auto)%d %s
-	crispy-cdate = [ %C(auto)%h ] %ad |C: %cd %C(green dim)%<(10,trunc)%ae%Creset %C(green dim)%<(10,trunc)|C:%ce%Creset%C(auto)%d %s
-	crispy-nc    = [ %h ] %ad | %<(10,trunc)%ae | %s                                               # display crispy with no color formatting (to make it easier to read when saved to a file)
-	sweet        = %C(auto)%h %C(green dim)%<(10,trunc)%ae%Creset%C(auto)%d %<(80,trunc)%s         # same as crisp with truncation of the message to 80 char
+	crispy       = [ %C(auto)%h ] %ad %C(green dim)%<(20,trunc)%ae%Creset%C(auto)%d %s
+	crispy-cdate = [ %C(auto)%h ] %ad |C: %cd %C(green dim)%<(10,trunc)%ae%Creset %C(green dim)%<(20,trunc)|C:%ce%Creset%C(auto)%d %s
+	crispy-nc    = [ %h ] %ad | %<(20,trunc)%ae | %s                                               # display crispy with no color formatting (to make it easier to read when saved to a file)
+	sweet        = %C(auto)%h %C(green dim)%<(20,trunc)%ae%Creset%C(auto)%d %<(80,trunc)%s         # same as crisp with truncation of the message to 80 char
 	brief        = %C(auto)%h | %ad | %C(green dim)%<(7,trunc)%ae%Creset%C(auto) %<(40,trunc)%s    # (80 columns) less emphasis on commit message; more on date, author, PR number
 	brief-nc     = %h | %ad | %<(7,trunc)%ae %<(40,trunc)%s                                        # (80 columns) less emphasis on commit message; more on date, author, PR number
 [push]
