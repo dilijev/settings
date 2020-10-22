@@ -209,7 +209,8 @@ if has('gui_running')
     " solarized for gvim
     colorscheme solarized
 else
-    colorscheme monokai
+    "colorscheme monokai
+    colorscheme elflord
 endif
 
 " protect against unfortunate deletions
