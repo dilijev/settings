@@ -194,6 +194,6 @@ export NVM_DIR="${HOME}/.nvm"
 # FASD
 
 # for some reason this slows down printing the prompt under WSL
-if [[ ( ! `cat /proc/version` =~ Microsoft ) || ( -n "${FORCE_FASD}" ) ]]; then
-    eval "$(fasd --init auto)"
-fi
+#if [[ ( ! `cat /proc/version` =~ Microsoft ) || ( -n "${FORCE_FASD}" ) ]]; then
+#    eval "$(fasd --init auto)"
+#fi
