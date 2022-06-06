@@ -7,3 +7,4 @@ cp ~/.profile .
 cp ~/.gvimrc .
 cp ~/.vimrc .
 cp ~/.tmux.conf .
+cp ~/.zshrc .
