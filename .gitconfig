@@ -1,6 +1,6 @@
 [user]
 	name = Doug Ilijev
-	email = doug.ilijev@gmail.com
+	email = doug.ilijev@datamarx.com
 
 [alias]
 	ci = commit
@@ -60,6 +60,7 @@
 	lfa = log --pretty=crispy --date=iso-local --first-parent
 	lfc = log --pretty=crispy-cdate --date=iso-local --first-parent -10
 	lfca = log --pretty=crispy-cdate --date=iso-local --first-parent
+	lfs = log --pretty=summary --date=format:%y-%m-%d --first-parent -10
 	gl = log --graph --pretty=crispy --date=iso-local -10
 	gla = log --graph --pretty=crispy --date=iso-local
 
@@ -124,6 +125,7 @@
 	sweet        = %C(auto)%h %C(green dim)%<(20,trunc)%ae%Creset%C(auto)%d %<(80,trunc)%s         # same as crisp with truncation of the message to 80 char
 	brief        = %C(auto)%h | %ad | %C(green dim)%<(7,trunc)%ae%Creset%C(auto) %<(40,trunc)%s    # (80 columns) less emphasis on commit message; more on date, author, PR number
 	brief-nc     = %h | %ad | %<(7,trunc)%ae %<(40,trunc)%s                                        # (80 columns) less emphasis on commit message; more on date, author, PR number
+    summary      = %ad %an %s
 [push]
 	default = simple
 
@@ -139,3 +141,8 @@
 	tool = kdiff3
 [credential]
 	helper = store
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true

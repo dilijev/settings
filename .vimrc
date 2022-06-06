@@ -9,10 +9,10 @@
 set so=7
 
 " Turn on the WiLd menu
-set wildmenu
+"set wildmenu
 
 " Ignore compiled files
-set wildignore=*.o,*~,*.pyc
+"set wildignore=*.o,*~,*.pyc
 
 " Always show current position
 set ruler
@@ -100,7 +100,7 @@ set number
 " highlight matching braces
 set showmatch
 " intelligent comments
-set comments=sl:/*,mb:\ *,elx:\ */
+"set comments=sl:/*,mb:\ *,elx:\ */
 
 " Install OmniCppComplete like described on http://vim.wikia.com/wiki/C++_code_completion
 " This offers intelligent C++ completion when typing '.', '->' or <C-o>
@@ -111,7 +111,7 @@ set tags+=~/.vim/tags/sdl
 set tags+=~/.vim/tags/qt4
 
 " Install DoxygenToolkit from http://www.vim.org/scripts/script.php?script_id=987
-let g:DoxygenToolkit_authorName="John Doe <john@doe.com>"
+"let g:DoxygenToolkit_authorName="John Doe <john@doe.com>"
 
 "
 " Enhanced keyboard mappings
@@ -135,13 +135,13 @@ nmap <M-Left> <C-o>
 nmap <M-Right> <C-i>
 
 " recreate tags file with F5
-map <F5> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
+"map <F5> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
 " create doxygen comment
-map <F6> :Dox<CR>
+"map <F6> :Dox<CR>
 " build using makeprg with <F7>
-map <F7> :make<CR>
+"map <F7> :make<CR>
 " build using makeprg with <S-F7>
-map <S-F7> :make clean all<CR>
+"map <S-F7> :make clean all<CR>
 
 " F8 turn off highlighted search results in normal or insert mode
 nmap <F8> :nohl<CR>
@@ -152,7 +152,7 @@ imap <F9> <ESC>:w<CR>a
 
 " switch between header/source with F10
 " map <F10> :e %:p:s,.h$,.X123X,:s,.cpp$,.h,:s,.X123X$,.cpp,<CR>
-map <F10> :e %:p:s,.h$,.X123X,:s,.c$,.h,:s,.X123X$,.c,<CR>
+"map <F10> :e %:p:s,.h$,.X123X,:s,.c$,.h,:s,.X123X$,.c,<CR>
 " goto definition with F12
 map <F12> <C-]>
 
@@ -178,15 +178,15 @@ endif
 "
 
 set runtimepath^=~\vimfiles
-set runtimepath^=~\vimfiles\bundle\ctrlp.vim
+"set runtimepath^=~\vimfiles\bundle\ctrlp.vim
 
 " ctrl-p: help finding files
-set runtimepath^=~/.vim/bundle/ctrlp.vim
+"set runtimepath^=~/.vim/bundle/ctrlp.vim
 " paredit: help finding files
-set runtimepath^=~/.vim/bundle/paredit.vim
-let g:paredit_mode = 1
+"set runtimepath^=~/.vim/bundle/paredit.vim
+"let g:paredit_mode = 1
 " rainbow:
-let g:rainbow_active = 1 " 0 if you want to enable later using :RainbowToggle
+"let g:rainbow_active = 1 " 0 if you want to enable later using :RainbowToggle
 
 " set the leader because the default (whatever it is) doesn't seem to work
 let mapleader = ","
