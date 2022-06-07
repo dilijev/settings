@@ -1,0 +1,45 @@
+# build commands
+
+export PATH=/Users/doug/dtmx/marx-browser/src/brave/vendor/depot_tools/bootstrap-2@3.8.10.chromium.23_bin/python/bin:$PATH
+
+export NINJA_STATUS='[%r processes, %f/%t @ %o/s : %es ]'
+alias bd="npm run build Debug -- --use_goma --ninja j:240"
+alias brn="npm run build Release -- --use_goma --channel=nightly --ninja j:240"
+alias br="npm run build Release -- --use_goma --channel=canary --ninja j:240"
+alias bdp='npm run create_dist -- "Debug" --use_goma --channel=nightly'
+alias brpn='npm run create_dist -- "Release" --use_goma --channel=nightly'
+alias brp='npm run create_dist -- "Release" --use_goma --channel=canary'
+
+export MARX_DEBUG=${HOME}/dtmx/marx-browser/src/out/Debug/
+export MARX_RELEASE=${HOME}/dtmx/marx-browser/src/out/Release/
+export MARX_APP_NAME=Marx\ Browser\ Canary.app
+export MARX_APP_NAME_DEV=Marx\ Browser\ Development.app
+export MARX_DEBUG_APP=${MARX_DEBUG}/${MARX_APP_NAME}
+export MARX_DEBUG_APP_DEV=${MARX_DEBUG}/${MARX_APP_NAME_DEV}
+export MARX_RELEASE_APP=${MARX_RELEASE}/${MARX_APP_NAME}
+export MARX_RELEASE_APP_DEV=${MARX_RELEASE}/${MARX_APP_NAME_DEV}
+
+alias drp="rm -rf '/Applications/${MARX_APP_NAME}'; cp -r '${MARX_RELEASE_APP}' '/Applications/${MARX_APP_NAME}'"
+alias drpd="rm -rf '/Applications/${MARX_APP_NAME_DEV}'; cp -r '${MARX_RELEASE_APP_DEV}' '/Applications/${MARX_APP_NAME_DEV}'"
+alias or="open '${HOME}/dtmx/marx-browser/src/out/Release/'"
+alias orx="open '${HOME}/dtmx/marx-browser/src/out/Release/${MARX_APP_NAME}'"
+alias orxd="open '${HOME}/dtmx/marx-browser/src/out/Release/${MARX_APP_NAME_DEV}'"
+alias od="open '${HOME}/dtmx/marx-browser/src/out/Debug/'"
+alias odx="open '${HOME}/dtmx/marx-browser/src/out/Debug/${MARX_APP_NAME}'"
+alias odxd="open '${HOME}/dtmx/marx-browser/src/out/Debug/${MARX_APP_NAME_DEV}'"
+
+# check commits in relevant paths
+
+export GOMACTL_USE_PROXY=false
+export DTMX_ROOT=${HOME}/dtmx
+export MARX_BROWSER_ROOT=${DTMX_ROOT}/marx-browser
+export MB_SRC_ROOT=${MARX_BROWSER_ROOT}/src
+export BRAVE_ROOT=${MB_SRC_ROOT}/brave
+
+alias px='pushd ${DTMX_ROOT}'
+alias pxb='pushd ${MARX_BROWSER_ROOT}'
+alias psrc='pushd ${MB_SRC_ROOT}'
+alias pcore='pushd ${BRAVE_ROOT}'
+alias poutd='pushd ${MARX_BROWSER_ROOT}/src/out/Debug'
+alias poutr='pushd ${MARX_BROWSER_ROOT}/src/out/Release'
+alias heads="sh -c 'pwd; echo ${DTMX_ROOT}; echo ${MARX_BROWSER_ROOT}; git -C ${MARX_BROWSER_ROOT} rv; git -C ${MARX_BROWSER_ROOT} head; echo ${MB_SRC_ROOT}; git -C ${MB_SRC_ROOT} rv; git -C ${MB_SRC_ROOT} head; echo ${BRAVE_ROOT}; git -C ${BRAVE_ROOT} rv; git -C ${BRAVE_ROOT} head'"
