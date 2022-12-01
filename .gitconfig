@@ -1,6 +1,15 @@
 [user]
 	name = Doug Ilijev
+	#email = doug.ilijev@gmail.com
+
+[user]  # DTMX
 	email = doug.ilijev@datamarx.com
+[include]
+	path = ~/dtmx.gitconfig
+
+[include]
+	path = ~/g.gitconfig
+
 [alias]
 	ci = commit
 	cm = commit -m
@@ -40,28 +49,36 @@
 	lsf = ls-files
 	fp = fetch --all -p                             # fetch and prune all branches from all remotes
 	ff = merge --ff-only
-	fg = "!git lsf | grep --color=auto -i $* #"     # "file grep"
+	fg = "!git lsf | grep --color=auto -i -E $* #"     # "file grep"
 	gr = grep -i -n --color=auto
 	mt = mergetool
+	mc = merge --continue
+	ma = merge --abort
 	rc = rebase --continue
 	ra = rebase --abort
 	pick = cherry-pick
 	pk = cherry-pick
+	pc = cherry-pick --continue
+	pa = cherry-pick --abort
 	rv = remote -v
 	sup = submodule update
 	undo = reset --hard HEAD
 	base = !git merge-base HEAD $1
 
-	glog = log --graph --date=iso-local
-	lg = -c core.pager=cat log --pretty=crispy --date=iso-local -10 --topo-order
-	lga = log --pretty=crispy --date=iso-local --topo-order
-	lf = -c core.pager=cat log --pretty=crispy --date=iso-local -10 --first-parent
-	lfa = log --pretty=crispy --date=iso-local --first-parent
-	lfc = -c core.pager=cat log --pretty=crispy-cdate --date=iso-local --first-parent -10
-	lfca = log --pretty=crispy-cdate --date=iso-local --first-parent
+	lg = -c core.pager=cat log --pretty=crisp --date=iso-local -10 --topo-order
+	lga = log --pretty=crisp --date=iso-local --topo-order
+
+	lf = -c core.pager=cat log --pretty=crisp --date=iso-local -10 --first-parent
+	lfa = log --pretty=crisp --date=iso-local --first-parent
+	lfc = -c core.pager=cat log --pretty=crisp-cdate --date=iso-local --first-parent -10
+	lfca = log --pretty=crisp-cdate --date=iso-local --first-parent
 	lfs = -c core.pager=cat log --pretty=summary --date=format:%y-%m-%d --first-parent -10
-	gl = -c core.pager=cat log --graph --pretty=crispy --date=iso-local -10
-	gla = log --graph --pretty=crispy --date=iso-local
+
+	glog = log --graph --date=iso-local
+	gl = -c core.pager=cat log --graph --pretty=crisp --date=iso-local -10
+	glc = -c core.pager=cat log --graph --pretty=crisp-cdate --date=iso-local -10
+	gla = log --graph --pretty=crisp --date=iso-local
+	glca = log --graph --pretty=crisp-cdate --date=iso-local
 
 	cf = config
 	cfg = config --global
@@ -72,16 +89,27 @@
 	hh = rev-parse --short
 	this = rev-parse --abbrev-ref HEAD          # get the name of the current branch, for scripting
 	has = branch -a --contains                  # which branches contain the current commit
-	relhas = "!sh -c 'git branch -a --contains $1 | grep -P release\\|[/]master #' $*"                  # which branches contain the current commit
+	relhas = "!sh -c 'git branch -a --contains $1 | grep -E release\\|[/]master #' $*"                  # which branches contain the current commit
 	hasrel = !git relhas $*
 	context =   "!git br | sed -e 's/*/ /' | xargs -I % git lf -1 %"
 	nocontext = "!git br | sed -e 's/*/ /' | xargs -I % git lf -1 % | rg -v 'origin[/]|master' | grep --color '[(].*[)]'"
-	branches = "for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)'"
-	branches-remote = "for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)' refs/remotes"
-	branches-local = "!git for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:iso8601)%09(%(authordate:relative))%09%(refname:short)' refs/heads | grep -vP 'master|released?[/]'"
+
+	branches = "for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)' $*"
+	#branches-remote = "for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)' refs/remotes"
+	branches-remote = "!git branches refs/remotes"
+	branches-remote-mine = "!git branches refs/remotes/origin/user/$USERNAME"
+	#branches-local = "!git for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:iso8601)%09(%(authordate:relative))%09%(refname:short)' refs/heads | grep -vP 'master|released?[/]'"
+	#branches-local = "!git for-each-ref --sort='-committerdate:iso8601' --format=' %(committerdate:iso8601)%09(%(committerdate:relative))%09%(refname:short)' refs/heads | grep -vE 'master|released?[/]'"
+	branches-local = "!git for-each-ref --sort='-committerdate:iso8601' --format=' %(committerdate:iso8601)%09(%(committerdate:relative))%09%(refname:short)' refs/heads"
+	#lbr = "!git branches-local | grep -Ev '\\s_'"
+	lbr = "!git branches-local | rg -v '\\s_'"
+	lbrv = "!git branches-local"
+	brm = branches-remote-mine
+
 	ignore = update-index --assume-unchanged
 	unignore = update-index --no-assume-unchanged
 	ignored = !sh -c 'git ls-files -v | grep -E "^[a-z]"'       # ls-files -v uses lowercase letters for files marked --assume-unchanged
+	chmodx = update-index --chmod=+x
 
 [alias] # experimental scripted commands
 	## Figure out the original branch
@@ -98,6 +126,7 @@
 	# fetch this branch from the tracking-remote, and then fast-forward the local branch
 	# ffp = "!sh -c 'git fetch $(git tracking-remote) $(git this); git merge --ff-only'"
 	ffp = "!sh -c 'git fetch $(git tracking-remote) $(git tracking-remote-branch); git merge --ff-only'"
+	fff = !git ffp
 
 	## Show changes only in the current branch
 	dt = !git diff $(git merge-base $(git tracking) HEAD)
@@ -109,22 +138,53 @@
 	pending = !git lga $(git merge-base HEAD master)..HEAD
 
 	## List everyone who worked in this file or tree
-	authors = "!sh -c 'git log --pretty=\"%an <%ae>\" $* | sort | uniq' $*"
-	authors-name-only = "!sh -c 'git log --pretty=\"%an\" $* | sort | uniq' $*"
+	authors = "!sh -c 'git log --pretty=\"%an <%ae>\" $* | sort | uniq #' $*"
+	authors-name-only = "!sh -c 'git log --pretty=\"%an\" $* | sort | uniq #' $*"
 
 	filetypes = "!sh -c 'git ls-files | sed -Ee \"s/.*([./][^/.]*)$/\\1/\" | sort | uniq' $*"
+
+	# refactor of merges above
+	merges1 = "!git rev-list $1..origin/master --merges --ancestry-path --reverse"
+	merges2 = "!git rev-list $1..$2 --merges --ancestry-path --reverse"
+	merges = "![ x$# != x1 ] && f() { git merges2 $1 $2; } || f() { git merges1 $1; }; f"
+
+	mergesf1 = "!git rev-list $1..origin/master --merges --ancestry-path --reverse --pretty=crisp --date=iso-local"
+	mergesf2 = "!git rev-list $1..$2 --merges --ancestry-path --reverse --pretty=crisp --date=iso-local"
+	mergesf = "![ x$# != x1 ] && f() { git mergesf2 $1 $2; } || f() { git mergesf1 $1; }; f"
+
+[alias]  # shorthand for master (m) and main (n) commands
+	# force (f) update branch (b) without switching (bf.)
+	bfm = !git fetch origin master && git branch -f master origin/master
+	bfn = !git fetch origin main && git branch -f main origin/main
+
+	# checkout (co.) master/main (m/n)
+	com = checkout master
+	con = checkout main
+
+	# checkout origin master/main fetch+force (co.f)
+	comf = !git fetch origin master && git checkout -B master origin/master
+	conf = !git fetch origin main && git checkout -B main origin/main
+
+	# rebase on origin master/main
+	rom = rebase origin/master
+	ron = rebase origin/main
+
+	# lf master/main
+	lfm = !git lf origin/master
+	lfn = !git lf origin/main
 
 [pretty]
 	compact      = %C(auto)[ %h ]  %ad  (%C(green dim)%an <%ae>%Creset%C(auto))%n    %s%n
 	compact-nc   = [%h]  %ad  (%an <%ae>)%n    %s%n
-	crisp        = %C(auto)%h %C(green dim)%<(10,trunc)%ae%Creset%C(auto)%d %s
-	crispy       = [ %C(auto)%h ] %ad %C(green dim)%<(20,trunc)%ae%Creset%C(auto)%d %s
-	crispy-cdate = [ %C(auto)%h ] %ad |C: %cd %C(green dim)%<(10,trunc)%ae%Creset %C(green dim)%<(20,trunc)|C:%ce%Creset%C(auto)%d %s
-	crispy-nc    = [ %h ] %ad | %<(20,trunc)%ae | %s                                               # display crispy with no color formatting (to make it easier to read when saved to a file)
-	sweet        = %C(auto)%h %C(green dim)%<(20,trunc)%ae%Creset%C(auto)%d %<(80,trunc)%s         # same as crisp with truncation of the message to 80 char
+	crisp        = [ %C(auto)%h ] %ad %C(green dim)%<(20,trunc)%ae%Creset%C(auto)%d %s
+	crisp-cdate  = [ %C(auto)%h ] %ad %C(green dim)%<(20,trunc)%ae%Creset %C(yellow dim)|C:%Creset %cd %C(green dim)%<(10,trunc)%ce%Creset%C(auto)%d %s
+	crisp-nc     = [ %h ] %ad | %<(20,trunc)%ae | %s                                               # display crisp with no color formatting (to make it easier to read when saved to a file)
+	crisp-short  = %C(auto)%h %C(green dim)%<(10,trunc)%ae%Creset%C(auto)%d %s
+	sweet        = %C(auto)%h %C(green dim)%<(20,trunc)%ae%Creset%C(auto)%d %<(80,trunc)%s         # same as crisp-short with truncation of the message to 80 char
 	brief        = %C(auto)%h | %ad | %C(green dim)%<(7,trunc)%ae%Creset%C(auto) %<(40,trunc)%s    # (80 columns) less emphasis on commit message; more on date, author, PR number
 	brief-nc     = %h | %ad | %<(7,trunc)%ae %<(40,trunc)%s                                        # (80 columns) less emphasis on commit message; more on date, author, PR number
-    summary      = %ad %an %s
+	summary      = %ad %an %s
+
 [push]
 	default = simple
 
@@ -138,8 +198,28 @@
 
 [merge]
 	tool = kdiff3
+
+### ======
+### CONFIG
+### ======
+
+[core]
+	autocrlf = false
+	safecrlf = true
+	excludesfile = ~/gitignore_global.txt
+	preloadindex = true
+	fscache = true
+	editor = notepad
+	whitespace = blank-at-eol,blank-at-eof,space-before-tab,tab-in-indent
+	filemode = false
+	commitGraph = true
+
+[credential "https://github.com"]
+	helper = !gh.exe auth git-credential
+
 [credential]
 	helper = store
+
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
@@ -153,3 +233,79 @@
 	program = gitsign
 [gpg]
 	format = x509
+	#interactive = never
+	#validate = false
+	#writelog = true
+	#helper = manager
+
+[fetch]
+	showForcedUpdates = true
+	showForcedUpdatesWarning = false
+
+[diff]
+	tool = bc
+[difftool "bc"]
+	path = C:\\Program Files\\Beyond Compare 4\\BComp.exe
+[difftool "odd"]
+	cmd = \"C:\\Program Files (x86)\\Odd\\Odd.exe\" $LOCAL $REMOTE
+[merge]
+	tool = bc
+[mergetool "bc"]
+	path = C:\\Program Files\\Beyond Compare 4\\BComp.exe
+[mergetool "odd"]
+	path = C:\\Program Files (x86)\\Odd\\Odd.exe
+
+# These aliases sometimes reference other aliases that are in my public .gitconfig file. See:
+# https://github.com/dilijev/settings/blob/master/.gitconfig
+
+[alias]
+	### GENERAL
+
+	## Configure any other branch (helpful when you want to fetch a branch not already configured above)
+	refspec-add = "!git remote set-branches --add origin $1* #"
+
+[alias]
+
+	## Publish a user branch on VSO for the current branch (or a named branch)
+	users-push =     "!git push origin HEAD:users/doilij/$(git this) -f #"
+	users-delete =   "!git push origin     :users/doilij/$(git this)    #"
+	uup =             !git users-push
+	uud =             !git users-delete
+	uupn =           "!git push origin   $1:users/doilij/$1 -f #"
+	uudn =           "!git push origin     :users/doilij/$1    #"
+
+	## Publish a user branch on VSO for the current branch (or a named branch)
+	user-push =     "!git push origin HEAD:user/doilij/$(git this) -f #"
+	user-delete =   "!git push origin     :user/doilij/$(git this)    #"
+	up =             !git user-push
+	ud =             !git user-delete
+	upn =           "!git push origin   $1:user/doilij/$1 -f #"
+	udn =           "!git push origin     :user/doilij/$1    #"
+
+	# git checkout your own VSO (origin) user branch with the given name
+	cuu = "!git fetch origin users/doilij/$1; git checkout -B $1 origin/users/doilij/$1 #"
+	cu =  "!git fetch origin  user/doilij/$1; git checkout -B $1 origin/user/doilij/$1 #"
+	# add a remote branch (from origin) and check it out with the same name
+	cb = "!git refspec-add $1; git fetch origin $1; git checkout -B $1 origin/$1 #"
+	fcb = "!git fetch origin $1; git checkout -B $1 origin/$1 #"
+
+	## Clean up all related branches (mnemonic: a = all)
+	# delete all associated instances of the current branch; don't try to delete the current branch (which we are on)
+	# ad = "!sh -c 'git bd; git ud; git pd; git rd'"
+	# delete all associated instances of the named branch; delete the current branch (will succeed if commit is merged in and we are not currently on that branch)
+	adn = "!sh -c 'git bdn $1; git udn $1; git pdn $1; git rdn $1; git branch -d $1' $*"
+	# ad = "!sh -c 'git bd 2>/dev/nul; git ud 2>/dev/nul; git pd 2>/dev/nul; git rd 2>/dev/nul'"
+	# adn = "!sh -c 'git bdn $1 2>/dev/nul; git udn $1 2>/dev/nul; git pdn $1 2>/dev/nul; git rdn $1 2>/dev/nul' $*"
+
+	me = log --first-parent --date=iso-local --pretty=crisp --author=doilij
+	me-nc = log --first-parent --date=iso-local --pretty=crisp-nc --author=doilij
+	gme = log --graph --date=iso-local --pretty=crisp --author=doilij
+
+	## List all branches that belong to me on all remotes (and ignore the rest of the branches which is mostly just noise to me)
+	branch-list = "!sh -c \"git branch; echo --; git branch -r | grep -E '(doilij|dilijev|^\\s+local/)'\""
+	bl = !git branch-list
+
+[branch]
+	autosetuprebase = always
+[pull]
+	rebase = true
