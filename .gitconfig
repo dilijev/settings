@@ -1,7 +1,6 @@
 [user]
 	name = Doug Ilijev
 	email = doug.ilijev@datamarx.com
-
 [alias]
 	ci = commit
 	cm = commit -m
@@ -11,7 +10,7 @@
 	check = commit -m "[checkpoint]"            # make a quick commit to be amended later
 	wip   = commit -m "[wip]"                   # make a quick commit to be amended later
 	co = checkout
-	br = branch
+	br = -c core.pager=cat branch
 	bv = branch -vv --no-color
 	sa  = status                                                        # a for all calculations
 	ssa = status -s                                                     # a for all calculations (short)
@@ -54,14 +53,14 @@
 	base = !git merge-base HEAD $1
 
 	glog = log --graph --date=iso-local
-	lg = log --pretty=crispy --date=iso-local -10 --topo-order
+	lg = -c core.pager=cat log --pretty=crispy --date=iso-local -10 --topo-order
 	lga = log --pretty=crispy --date=iso-local --topo-order
-	lf = log --pretty=crispy --date=iso-local -10 --first-parent
+	lf = -c core.pager=cat log --pretty=crispy --date=iso-local -10 --first-parent
 	lfa = log --pretty=crispy --date=iso-local --first-parent
-	lfc = log --pretty=crispy-cdate --date=iso-local --first-parent -10
+	lfc = -c core.pager=cat log --pretty=crispy-cdate --date=iso-local --first-parent -10
 	lfca = log --pretty=crispy-cdate --date=iso-local --first-parent
-	lfs = log --pretty=summary --date=format:%y-%m-%d --first-parent -10
-	gl = log --graph --pretty=crispy --date=iso-local -10
+	lfs = -c core.pager=cat log --pretty=summary --date=format:%y-%m-%d --first-parent -10
+	gl = -c core.pager=cat log --graph --pretty=crispy --date=iso-local -10
 	gla = log --graph --pretty=crispy --date=iso-local
 
 	cf = config
@@ -76,7 +75,7 @@
 	relhas = "!sh -c 'git branch -a --contains $1 | grep -P release\\|[/]master #' $*"                  # which branches contain the current commit
 	hasrel = !git relhas $*
 	context =   "!git br | sed -e 's/*/ /' | xargs -I % git lf -1 %"
-	nocontext = "!git br | sed -e 's/*/ /' | xargs -I % git lf -1 % | grep -vP 'origin[/]|master' | grep --color '[(].*[)]'"
+	nocontext = "!git br | sed -e 's/*/ /' | xargs -I % git lf -1 % | rg -v 'origin[/]|master' | grep --color '[(].*[)]'"
 	branches = "for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)'"
 	branches-remote = "for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)' refs/remotes"
 	branches-local = "!git for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:iso8601)%09(%(authordate:relative))%09%(refname:short)' refs/heads | grep -vP 'master|released?[/]'"
@@ -146,3 +145,11 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+[commit]
+	gpgsign = false
+[tag]
+	gpgsign = false
+[gpg "x509"]
+	program = gitsign
+[gpg]
+	format = x509
