@@ -215,7 +215,7 @@
 	commitGraph = true
 
 [credential "https://github.com"]
-	helper = !gh.exe auth git-credential
+	helper = !gh auth git-credential
 
 [credential]
 	helper = store
