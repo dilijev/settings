@@ -97,7 +97,7 @@
 	branches = "for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)' $*"
 	#branches-remote = "for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)' refs/remotes"
 	branches-remote = "!git branches refs/remotes"
-	branches-remote-mine = "!git branches refs/remotes/origin/user/$USERNAME"
+	branches-remote-mine = "!git branches refs/remotes/origin/user/dilijev"
 	#branches-local = "!git for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:iso8601)%09(%(authordate:relative))%09%(refname:short)' refs/heads | grep -vP 'master|released?[/]'"
 	#branches-local = "!git for-each-ref --sort='-committerdate:iso8601' --format=' %(committerdate:iso8601)%09(%(committerdate:relative))%09%(refname:short)' refs/heads | grep -vE 'master|released?[/]'"
 	branches-local = "!git for-each-ref --sort='-committerdate:iso8601' --format=' %(committerdate:iso8601)%09(%(committerdate:relative))%09%(refname:short)' refs/heads"
@@ -266,25 +266,25 @@
 
 [alias]
 
-	## Publish a user branch on VSO for the current branch (or a named branch)
-	users-push =     "!git push origin HEAD:users/doilij/$(git this) -f #"
-	users-delete =   "!git push origin     :users/doilij/$(git this)    #"
+	## Publish a user branch for the current branch (or a named branch)
+	users-push =     "!git push origin HEAD:users/dilijev/$(git this) -f #"
+	users-delete =   "!git push origin     :users/dilijev/$(git this)    #"
 	uup =             !git users-push
 	uud =             !git users-delete
-	uupn =           "!git push origin   $1:users/doilij/$1 -f #"
-	uudn =           "!git push origin     :users/doilij/$1    #"
+	uupn =           "!git push origin   $1:users/dilijev/$1 -f #"
+	uudn =           "!git push origin     :users/dilijev/$1    #"
 
 	## Publish a user branch on VSO for the current branch (or a named branch)
-	user-push =     "!git push origin HEAD:user/doilij/$(git this) -f #"
-	user-delete =   "!git push origin     :user/doilij/$(git this)    #"
+	user-push =     "!git push origin HEAD:user/dilijev/$(git this) -f #"
+	user-delete =   "!git push origin     :user/dilijev/$(git this)    #"
 	up =             !git user-push
 	ud =             !git user-delete
-	upn =           "!git push origin   $1:user/doilij/$1 -f #"
-	udn =           "!git push origin     :user/doilij/$1    #"
+	upn =           "!git push origin   $1:user/dilijev/$1 -f #"
+	udn =           "!git push origin     :user/dilijev/$1    #"
 
 	# git checkout your own VSO (origin) user branch with the given name
-	cuu = "!git fetch origin users/doilij/$1; git checkout -B $1 origin/users/doilij/$1 #"
-	cu =  "!git fetch origin  user/doilij/$1; git checkout -B $1 origin/user/doilij/$1 #"
+	cuu = "!git fetch origin users/dilijev/$1; git checkout -B $1 origin/users/dilijev/$1 #"
+	cu =  "!git fetch origin  user/dilijev/$1; git checkout -B $1 origin/user/dilijev/$1 #"
 	# add a remote branch (from origin) and check it out with the same name
 	cb = "!git refspec-add $1; git fetch origin $1; git checkout -B $1 origin/$1 #"
 	fcb = "!git fetch origin $1; git checkout -B $1 origin/$1 #"
@@ -297,12 +297,12 @@
 	# ad = "!sh -c 'git bd 2>/dev/nul; git ud 2>/dev/nul; git pd 2>/dev/nul; git rd 2>/dev/nul'"
 	# adn = "!sh -c 'git bdn $1 2>/dev/nul; git udn $1 2>/dev/nul; git pdn $1 2>/dev/nul; git rdn $1 2>/dev/nul' $*"
 
-	me = log --first-parent --date=iso-local --pretty=crisp --author=doilij
-	me-nc = log --first-parent --date=iso-local --pretty=crisp-nc --author=doilij
-	gme = log --graph --date=iso-local --pretty=crisp --author=doilij
+	me = log --first-parent --date=iso-local --pretty=crisp --author=dilijev
+	me-nc = log --first-parent --date=iso-local --pretty=crisp-nc --author=dilijev
+	gme = log --graph --date=iso-local --pretty=crisp --author=dilijev
 
 	## List all branches that belong to me on all remotes (and ignore the rest of the branches which is mostly just noise to me)
-	branch-list = "!sh -c \"git branch; echo --; git branch -r | grep -E '(doilij|dilijev|^\\s+local/)'\""
+	branch-list = "!sh -c \"git branch; echo --; git branch -r | rg 'dilijev'\""
 	bl = !git branch-list
 
 [branch]
