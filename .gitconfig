@@ -297,9 +297,9 @@
 	# ad = "!sh -c 'git bd 2>/dev/nul; git ud 2>/dev/nul; git pd 2>/dev/nul; git rd 2>/dev/nul'"
 	# adn = "!sh -c 'git bdn $1 2>/dev/nul; git udn $1 2>/dev/nul; git pdn $1 2>/dev/nul; git rdn $1 2>/dev/nul' $*"
 
-	me = log --first-parent --date=iso-local --pretty=crisp --author=dilijev
-	me-nc = log --first-parent --date=iso-local --pretty=crisp-nc --author=dilijev
-	gme = log --graph --date=iso-local --pretty=crisp --author=dilijev
+	me = log --first-parent --date=iso-local --pretty=crisp --author=doug.ilijev
+	me-nc = log --first-parent --date=iso-local --pretty=crisp-nc --author=doug.ilijev
+	gme = log --graph --date=iso-local --pretty=crisp --author=doug.ilijev
 
 	## List all branches that belong to me on all remotes (and ignore the rest of the branches which is mostly just noise to me)
 	branch-list = "!sh -c \"git branch; echo --; git branch -r | rg 'dilijev'\""
