@@ -20,6 +20,8 @@ alias sz='source ~/.zshrc'
 alias ex='vim ~/.dtmx_aliases'
 alias sx='source ~/.dtmx_aliases'
 
+alias rgn='rg --no-ignore'
+
 #alias fasd-init='eval "$(fasd --init auto)"'
 #alias nvm-init='. "$NVM_DIR/nvm.sh"'
 
