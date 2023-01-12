@@ -109,3 +109,5 @@ fi
 if [ -f ~/.dtmx_aliases ]; then
     . ~/.dtmx_aliases
 fi
+export NVS_HOME="$HOME/.nvs"
+[ -s "$NVS_HOME/nvs.sh" ] && . "$NVS_HOME/nvs.sh"
