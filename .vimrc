@@ -128,6 +128,10 @@ imap lh <Esc>I
 " go to end of line
 imap hl <Esc>A
 
+" home and end navigation
+nmap lh ^
+nmap hl $
+
 " navigation
 nmap <C-Tab> :b#<CR>
 imap <C-Tab> <Esc>:b#<CR>i
@@ -177,7 +181,7 @@ endif
 " plugins
 "
 
-set runtimepath^=~\vimfiles
+"set runtimepath^=~\vimfiles
 "set runtimepath^=~\vimfiles\bundle\ctrlp.vim
 
 " ctrl-p: help finding files
@@ -186,14 +190,15 @@ set runtimepath^=~\vimfiles
 "set runtimepath^=~/.vim/bundle/paredit.vim
 "let g:paredit_mode = 1
 " rainbow:
-"let g:rainbow_active = 1 " 0 if you want to enable later using :RainbowToggle
+let g:rainbow_active = 1
+" 0 if you want to enable later using :RainbowToggle
 
 " set the leader because the default (whatever it is) doesn't seem to work
 let mapleader = ","
 
 highlight ExtraWhitespace ctermbg=darkgreen guibg=darkgreen
 match ExtraWhitespace /\v(\s+$)|(^(\s+)?(\t+)(\s+)?\ze\w)/
-autocmd ColorScheme * highlight ExtraWhitespace ctermbg=darkgreen guibg=darkgreen
+"autocmd ColorScheme * highlight ExtraWhitespace ctermbg=darkgreen guibg=darkgreen
 
 "highlight Tabs ctermbg=darkred guibg=darkred
 "match Tabs /\t+/
@@ -210,7 +215,8 @@ if has('gui_running')
     colorscheme solarized
 else
     "colorscheme monokai
-    colorscheme elflord
+    "colorscheme elflord
+    colorscheme default
 endif
 
 " protect against unfortunate deletions
