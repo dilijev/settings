@@ -39,6 +39,7 @@
 	dcn = diff --cached --name-status
 	dcnn = diff --cached --name-only
 	dst = diff --stat
+	dsst = diff --shortstat
 	dcst = diff --cached --stat
 	dcsst = diff --cached --shortstat
 	sn = show --name-status
@@ -49,7 +50,7 @@
 	lsf = ls-files
 	fp = fetch --all -p                             # fetch and prune all branches from all remotes
 	ff = merge --ff-only
-	fg = "!git lsf | grep --color=auto -i -E $* #"     # "file grep"
+	fg = "!git ls-files | grep --color=auto -i -E $* #"     # "file grep"
 	gr = grep -i -n --color=auto
 	mt = mergetool
 	mc = merge --continue
@@ -91,21 +92,35 @@
 	has = branch -a --contains                  # which branches contain the current commit
 	relhas = "!sh -c 'git branch -a --contains $1 | grep -E release\\|[/]master #' $*"                  # which branches contain the current commit
 	hasrel = !git relhas $*
-	context =   "!git br | sed -e 's/*/ /' | xargs -I % git lf -1 %"
-	nocontext = "!git br | sed -e 's/*/ /' | xargs -I % git lf -1 % | rg -v 'origin[/]|master' | grep --color '[(].*[)]'"
+	context =   "!git branch | sed -e 's/*/ /' | xargs -I % git lf -1 %"
+	context-remote = "!git branch -r | xargs -I % git lf -1 %"
+	nocontext = "!git branch | sed -e 's/*/ /' | xargs -I % git lf -1 % | rg -v 'origin[/]|master' | grep --color '[(].*[)]'"
 
-	branches = "for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)' $*"
-	#branches-remote = "for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)' refs/remotes"
-	branches-remote = "!git branches refs/remotes"
-	branches-remote-mine = "!git branches refs/remotes/origin/user/dilijev"
+	# branches = "for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)' $*"
+	branches = "!sh -c 'git for-each-ref --sort=\"-authordate:iso8601\" --format=\" %(committerdate:iso8601)%09(%(committerdate:relative))%09%(refname:short)\" ${1:-refs/heads} #' $*"
+	brs = branches
+
 	#branches-local = "!git for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:iso8601)%09(%(authordate:relative))%09%(refname:short)' refs/heads | grep -vP 'master|released?[/]'"
 	#branches-local = "!git for-each-ref --sort='-committerdate:iso8601' --format=' %(committerdate:iso8601)%09(%(committerdate:relative))%09%(refname:short)' refs/heads | grep -vE 'master|released?[/]'"
-	branches-local = "!git for-each-ref --sort='-committerdate:iso8601' --format=' %(committerdate:iso8601)%09(%(committerdate:relative))%09%(refname:short)' refs/heads"
+	branches-local = branches
+	brl = branches
+
+	#branches-remote = "for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)' refs/remotes"
+	branches-remote = "!git branches refs/remotes"
+	branches-remote-origin = "!git branches refs/remotes/origin"
+	branches-remote-mine = "!git branches refs/remotes/origin/user/dilijev"
+
+	brr = branches-remote
+	bro = branches-remote-origin
+	brm = branches-remote-mine
+
 	#lbr = "!git branches-local | grep -Ev '\\s_'"
 	lbr = "!git branches-local | rg -v '\\s_'"
 	lbrv = "!git branches-local"
-	brm = branches-remote-mine
 
+	# ---
+	# ignoring files
+	# ---
 	ignore = update-index --assume-unchanged
 	unignore = update-index --no-assume-unchanged
 	ignored = !sh -c 'git ls-files -v | grep -E "^[a-z]"'       # ls-files -v uses lowercase letters for files marked --assume-unchanged
@@ -135,7 +150,9 @@
 	lt = !git lg $(git tracking)..
 
 	## List all commits present in this branch that are not present in the named branch
-	pending = !git lga $(git merge-base HEAD master)..HEAD
+	# pending = !git lga $(git merge-base HEAD master)~..HEAD
+	pending = "!sh -c 'git lga $(git merge-base ${2:-origin/master} $1)~..$1 #' $*"
+	pend = !git pending
 
 	## List everyone who worked in this file or tree
 	authors = "!sh -c 'git log --pretty=\"%an <%ae>\" $* | sort | uniq #' $*"
@@ -209,7 +226,7 @@
 	excludesfile = ~/gitignore_global.txt
 	preloadindex = true
 	fscache = true
-	editor = notepad
+	editor = vim
 	whitespace = blank-at-eol,blank-at-eof,space-before-tab,tab-in-indent
 	filemode = false
 	commitGraph = true
@@ -266,21 +283,27 @@
 
 [alias]
 
+	## Publish a branch as-named
+	p =              "!git push -u origin HEAD:$(git this) -f #"
+	pd =             "!git push    origin     :$(git this)    #"
+	pn =             "!git push -u origin   $1:$1          -f #"
+	pdn =            "!git push    origin     :$1             #"
+
 	## Publish a user branch for the current branch (or a named branch)
-	users-push =     "!git push origin HEAD:users/dilijev/$(git this) -f #"
-	users-delete =   "!git push origin     :users/dilijev/$(git this)    #"
+	users-push =     "!git push -u origin HEAD:users/dilijev/$(git this) -f #"
+	users-delete =   "!git push    origin     :users/dilijev/$(git this)    #"
 	uup =             !git users-push
 	uud =             !git users-delete
-	uupn =           "!git push origin   $1:users/dilijev/$1 -f #"
-	uudn =           "!git push origin     :users/dilijev/$1    #"
+	uupn =           "!git push -u origin   $1:users/dilijev/$1 -f #"
+	uudn =           "!git push    origin     :users/dilijev/$1    #"
 
 	## Publish a user branch on VSO for the current branch (or a named branch)
-	user-push =     "!git push origin HEAD:user/dilijev/$(git this) -f #"
-	user-delete =   "!git push origin     :user/dilijev/$(git this)    #"
+	user-push =     "!git push -u origin HEAD:user/dilijev/$(git this) -f #"
+	user-delete =   "!git push    origin     :user/dilijev/$(git this)    #"
 	up =             !git user-push
 	ud =             !git user-delete
-	upn =           "!git push origin   $1:user/dilijev/$1 -f #"
-	udn =           "!git push origin     :user/dilijev/$1    #"
+	upn =           "!git push -u origin   $1:user/dilijev/$1 -f #"
+	udn =           "!git push    origin     :user/dilijev/$1    #"
 
 	# git checkout your own VSO (origin) user branch with the given name
 	cuu = "!git fetch origin users/dilijev/$1; git checkout -B $1 origin/users/dilijev/$1 #"
