@@ -97,7 +97,8 @@
 	nocontext = "!git branch | sed -e 's/*/ /' | xargs -I % git lf -1 % | rg -v 'origin[/]|master' | grep --color '[(].*[)]'"
 
 	# branches = "for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)' $*"
-	branches = "!sh -c 'git for-each-ref --sort=\"-authordate:iso8601\" --format=\" %(committerdate:iso8601)%09(%(committerdate:relative))%09%(refname:short)\" ${1:-refs/heads} #' $*"
+	# branches = "!sh -c 'git for-each-ref --sort=\"-authordate:iso8601\" --format=\" %(committerdate:iso8601)%09(%(committerdate:relative))%09%(refname:short)\" ${1:-refs/heads} #' $*"
+	branches = "!sh -c 'git for-each-ref --sort=\"-committerdate:iso8601\" --format=\" %(committerdate:iso8601)%09(%(committerdate:relative))%09%(refname:short)\" ${1:-refs/heads} #' $*"
 	brs = branches
 
 	#branches-local = "!git for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:iso8601)%09(%(authordate:relative))%09%(refname:short)' refs/heads | grep -vP 'master|released?[/]'"
@@ -151,8 +152,11 @@
 
 	## List all commits present in this branch that are not present in the named branch
 	# pending = !git lga $(git merge-base HEAD master)~..HEAD
-	pending = "!sh -c 'git lga $(git merge-base ${2:-origin/master} $1)~..$1 #' $*"
+	pending = "!sh -c 'git lga $(git merge-base ${2:-origin/master} ${1:-$(git this)})~..${1:-$(git this)} #' $*"
+	pendingc = "!sh -c 'git -c core.pager=cat lga --pretty=crisp-cdate $(git merge-base ${2:-origin/master} ${1:-$(git this)})~..${1:-$(git this)} #' $*"
 	pend = !git pending
+	pm = "!git pending $(git this) origin/master"
+	pn = "!git pending $(git this) origin/main"
 
 	## List everyone who worked in this file or tree
 	authors = "!sh -c 'git log --pretty=\"%an <%ae>\" $* | sort | uniq #' $*"
@@ -168,6 +172,9 @@
 	mergesf1 = "!git rev-list $1..origin/master --merges --ancestry-path --reverse --pretty=crisp --date=iso-local"
 	mergesf2 = "!git rev-list $1..$2 --merges --ancestry-path --reverse --pretty=crisp --date=iso-local"
 	mergesf = "![ x$# != x1 ] && f() { git mergesf2 $1 $2; } || f() { git mergesf1 $1; }; f"
+
+	gone = "!sh -c 'git branch -vv | rg \": gone\\]\" ' "
+	gone-name-only = "!sh -c 'git branch -vv | rg \": gone\\]\" | rg \"^\\s+user/\" | awk \"{ print \\$1 }\" ' "
 
 [alias]  # shorthand for master (m) and main (n) commands
 	# force (f) update branch (b) without switching (bf.)
@@ -284,10 +291,10 @@
 [alias]
 
 	## Publish a branch as-named
-	p =              "!git push -u origin HEAD:$(git this) -f #"
-	pd =             "!git push    origin     :$(git this)    #"
-	pn =             "!git push -u origin   $1:$1          -f #"
-	pdn =            "!git push    origin     :$1             #"
+	bp =              "!git push -u origin HEAD:$(git this) -f #"
+	bpd =             "!git push    origin     :$(git this)    #"
+	bpn =             "!git push -u origin ${1:-__nobranch__}:${1:-__nobranch__} -f #"
+	bpdn =            "!git push    origin                   :${1:-__nobranch__}    #"
 
 	## Publish a user branch for the current branch (or a named branch)
 	users-push =     "!git push -u origin HEAD:users/dilijev/$(git this) -f #"
@@ -332,3 +339,5 @@
 	autosetuprebase = always
 [pull]
 	rebase = true
+[init]
+	defaultBranch = main
