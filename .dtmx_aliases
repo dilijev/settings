@@ -1,0 +1,162 @@
+#!/usr/bin/bash
+
+# Bruce's functions
+pull_repo() { echo "Pulling in repo $1" && pushd $1 && git pull -r && popd }
+checkout_main() { echo "Checkout main in repo $1" && pushd $1 && git checkout main && git pull -r && popd }
+
+export CHROMIUM_LLDBINIT_SOURCED=1
+
+export AWS_PROFILE=dtmx-sandbox-admin
+
+export PATH="/Users/doug/dtmx/marx-browser/src/brave/vendor/depot_tools/bootstrap-2@3.8.10.chromium.23_bin/python/bin:$HOME/bin:$PATH"
+export GOMA_SERVER_HOST=andalusite.goma.engflow.com
+export GOMA_USE_LOCAL=false
+
+export NINJA_STATUS='[%r processes, %f/%t @ %o/s : %es ]'
+export J_VALUE='100'
+
+# force git pager=cat (instead of default less, no paging)
+alias cit="git -c core.pager=cat $*"
+# force git editor=vim (instead of default nano)
+alias vit="git -c core.editor=vim $*"
+
+# We've found this to be useful
+# because you may pull but forget to apply_patches and the build doesn't work as expected
+# or you may start editing files and update_patches becomes a tangled mess.
+alias pa="git pull && npm run apply_patches"
+
+# build commands
+
+# starts with b = build
+# ends with p = create app package (.dmg)
+# i = intel
+# 1 = stop after one build failure
+alias bd="npm run build Debug -- --target_arch arm64 --use_goma --ninja j:${J_VALUE} --ignore_compile_failure"
+alias bd1="npm run build Debug -- --target_arch arm64 --use_goma --ninja j:${J_VALUE}"
+alias bdi="npm run build Debug -- --target_arch x64 --use_goma --ninja j:${J_VALUE}"
+alias br="npm run build Release -- --target_arch arm64 --use_goma --channel=canary --ninja j:${J_VALUE}"
+alias bri="npm run build Release -- --target_arch x64 --use_goma --channel=canary --ninja j:${J_VALUE}"
+
+alias bdpi='npm run create_dist -- "Debug" --target_arch x64 --use_goma --channel=canary'
+alias bdp='npm run create_dist -- "Debug" --target_arch arm64 --use_goma --channel=canary'
+alias brpi='npm run create_dist -- "Release" --target_arch x64 --use_goma --channel=canary'
+alias brp='npm run create_dist -- "Release" --target_arch arm64 --use_goma --channel=canary'
+
+# notarization settings
+alias brpna='npm run create_dist -- "Release" --use_goma --channel=canary --notarize --target_arch arm64'
+alias brpni='npm run create_dist -- "Release" --use_goma --channel=canary --notarize --target_arch x64'
+# <from Bruce, values partially deleted>
+# npm config set mac_installer_signing_identifier=9E9F...
+# npm config set mac_signing_identifier=3D6DAFEEEB1F19A7CF0A4A
+# npm config set notary_password=ppnj-k
+# npm config set notary_user=brucemor@hotmail.comalksmlsdfsnV
+
+alias bro='npm run build Release -- --use_goma --channel=canary --ninja j:${J_VALUE} --gn is_official_build:true'
+
+export _BRAND=Primary
+
+export PRIMARY_DEBUG=${HOME}/dtmx/marx-browser/src/out/Debug/
+export PRIMARY_RELEASE=${HOME}/dtmx/marx-browser/src/out/Release/
+export PRIMARY_APP_NAME=${_BRAND}\ Browser\ Canary.app
+export PRIMARY_APP_NAME_DEV=${_BRAND}\ Browser\ Development.app
+export PRIMARY_DEBUG_APP=${PRIMARY_DEBUG}/${PRIMARY_APP_NAME}
+export PRIMARY_DEBUG_APP_DEV=${PRIMARY_DEBUG}/${PRIMARY_APP_NAME_DEV}
+export PRIMARY_RELEASE_APP=${PRIMARY_RELEASE}/${PRIMARY_APP_NAME}
+export PRIMARY_RELEASE_APP_DEV=${PRIMARY_RELEASE}/${PRIMARY_APP_NAME_DEV}
+
+export PRIMARY_TEST_DATA_DIR="${HOME}/cr-profile/${_BRAND}-development/"
+export PRIMARY_TEST_DATA_DIR_OPT="--user-data-dir=${PRIMARY_TEST_DATA_DIR}"
+
+export PRIMARY_RELEASE_ARM64_ARG="'${HOME}/dtmx/marx-browser/src/out/Release_arm64/${PRIMARY_APP_NAME}'"
+export PRIMARY_RELEASE_ARG="'${HOME}/dtmx/marx-browser/src/out/Release/${PRIMARY_APP_NAME}'"
+export PRIMARY_DEBUG_ARM64_ARG="'${HOME}/dtmx/marx-browser/src/out/Debug_arm64/${PRIMARY_APP_NAME_DEV}'"
+export PRIMARY_DEBUG_ARG="'${HOME}/dtmx/marx-browser/src/out/Debug/${PRIMARY_APP_NAME_DEV}'"
+
+# open with flags set
+
+export _F_DPX_FLAG_VALUE='--disable-primary-extensions'
+export _F_DPX_FLAG="${_F_DPX_FLAG_VALUE}"
+set_dpx() { export _F_DPX_FLAG="${_F_DPX_FLAG_VALUE}" ; }
+clr_dpx() { export _F_DPX_FLAG="" ; }
+
+export _F_COMP_FLAG_VALUE='--show-component-extension-options'
+export _F_COMP_FLAG="${_F_COMP_FLAG_VALUE}"
+set_comp() { export _F_COMP_FLAG="${_F_COMP_FLAG_VALUE}" ; }
+clr_comp() { export _F_COMP_FLAG="" ; }
+
+export _F_DARK_FLAG_VALUE='--dark-mode=dark'
+export _F_DARK_FLAG=""
+set_dark() { export _F_DARK_FLAG="${_F_DARK_FLAG_VALUE}" ; }
+clr_dark() { export _F_DARK_FLAG="" ; }
+
+export _F_UDD_FLAG=""
+set_udd() { export _F_UDD_FLAG="'--user-data-dir=$1'" ; }
+clr_udd() { export _F_UDD_FLAG="" ; }
+
+alias edf="echo 'open ${PRIMARY_DEBUG_ARM64_ARG} --args ${_F_DPX_FLAG} ${_F_COMP_FLAG} ${_F_DARK_FLAG} ${_F_UDD_FLAG}'"
+alias odf="open ${PRIMARY_DEBUG_ARM64_ARG} --args ${_F_DPX_FLAG} ${_F_COMP_FLAG} ${_F_DARK_FLAG} ${_F_UDD_FLAG}"
+
+# ABC (A = action, B = build flavor, C = extras)
+#
+# A:
+# d = delete
+# o = open
+#
+# B:
+# r|d = release|debug
+#
+# C:
+# x = execute application
+# p = with test Profile directory (instead of default location, allows for multiple distinct instances)
+# i = intel (as opposed to default ARM64 on an ARM64 M1/M2 Mac)
+# d = Development (as opposed to Dev) flavor distinction (Debug defaults to Development flavor, Release defaults to Canary)
+alias drp="rm -rf '/Applications/${PRIMARY_APP_NAME}'; cp -r '${PRIMARY_RELEASE_APP}' '/Applications/${PRIMARY_APP_NAME}'"
+alias drpd="rm -rf '/Applications/${PRIMARY_APP_NAME_DEV}'; cp -r '${PRIMARY_RELEASE_APP_DEV}' '/Applications/${PRIMARY_APP_NAME_DEV}'"
+alias ora="open '${home}/dtmx/marx-browser/src/out/release_arm64/'"
+alias ori="open '${HOME}/dtmx/marx-browser/src/out/Release/'"
+alias orx="open '${HOME}/dtmx/marx-browser/src/out/Release_arm64/${PRIMARY_APP_NAME}'"
+alias orxp="open '${HOME}/dtmx/marx-browser/src/out/Release_arm64/${PRIMARY_APP_NAME}' --args ${PRIMARY_TEST_DATA_DIR_OPT}"
+
+orxudd() {
+    echo "open '${HOME}/dtmx/marx-browser/src/out/Release_arm64/${PRIMARY_APP_NAME}' --args --disable-primary-extensions --user-data-dir=$1" ;
+    open '${HOME}/dtmx/marx-browser/src/out/Release_arm64/${PRIMARY_APP_NAME}' --args --user-data-dir=$1 ;
+}
+
+
+alias orxi="open '${HOME}/dtmx/marx-browser/src/out/Release/${PRIMARY_APP_NAME}'"
+alias orxd="open '${HOME}/dtmx/marx-browser/src/out/Release_arm64/${PRIMARY_APP_NAME_DEV}'"
+alias oda="open '${HOME}/dtmx/marx-browser/src/out/Debug_arm64/'"
+alias odi="open '${HOME}/dtmx/marx-browser/src/out/Debug/'"
+alias odx="open '${HOME}/dtmx/marx-browser/src/out/Debug_arm64/${PRIMARY_APP_NAME_DEV}'"
+alias odxp="open '${HOME}/dtmx/marx-browser/src/out/Debug_arm64/${PRIMARY_APP_NAME_DEV}' --args ${PRIMARY_TEST_DATA_DIR_OPT}"
+alias odxi="open '${HOME}/dtmx/marx-browser/src/out/Debug/${PRIMARY_APP_NAME_DEV}'"
+alias odxd="open '${HOME}/dtmx/marx-browser/src/out/Debug_arm64/${PRIMARY_APP_NAME_DEV}'"
+
+alias pclear="rm -rf ${PRIMARY_TEST_DATA_DIR}"
+alias orxcomp="open '${HOME}/dtmx/marx-browser/src/out/Release_arm64/${PRIMARY_APP_NAME}' --args --show-component-extension-options"
+alias orxdark="open '${HOME}/dtmx/marx-browser/src/out/Release_arm64/${PRIMARY_APP_NAME}' --args --show-component-extension-options --dark-mode=dark"
+alias orxpcomp="open '${HOME}/dtmx/marx-browser/src/out/Release_arm64/${PRIMARY_APP_NAME}' --args --show-component-extension-options ${PRIMARY_TEST_DATA_DIR_OPT}"
+alias orxpdark="open '${HOME}/dtmx/marx-browser/src/out/Release_arm64/${PRIMARY_APP_NAME}' --args --show-component-extension-options --dark-mode=dark ${PRIMARY_TEST_DATA_DIR_OPT}"
+
+# navigate to common dirs
+
+export DTMX_ROOT=${HOME}/dtmx
+export PRIMARY_BROWSER_ROOT=${DTMX_ROOT}/marx-browser
+export MB_SRC_ROOT=${PRIMARY_BROWSER_ROOT}/src
+export BRAVE_ROOT=${MB_SRC_ROOT}/brave
+
+alias px='pushd ${DTMX_ROOT}'
+alias pxb='pushd ${PRIMARY_BROWSER_ROOT}'
+alias proot='pushd ${PRIMARY_BROWSER_ROOT}'
+alias psrc='pushd ${MB_SRC_ROOT}'
+alias pcore='pushd ${BRAVE_ROOT}'
+alias poutd='pushd ${PRIMARY_BROWSER_ROOT}/src/out/Debug_arm64'
+alias poutr='pushd ${PRIMARY_BROWSER_ROOT}/src/out/Release_arm64'
+alias poutri='pushd ${PRIMARY_BROWSER_ROOT}/src/out/Release' # i = intel
+
+# check commits in relevant paths
+
+alias heads="sh -c 'pwd; echo ${DTMX_ROOT}; echo ${PRIMARY_BROWSER_ROOT}; git -C ${PRIMARY_BROWSER_ROOT} rv; git -C ${PRIMARY_BROWSER_ROOT} head; echo ${MB_SRC_ROOT}; git -C ${MB_SRC_ROOT} rv; git -C ${MB_SRC_ROOT} head; echo ${BRAVE_ROOT}; git -C ${BRAVE_ROOT} rv; git -C ${BRAVE_ROOT} head'"
+
+alias code="/Applications/Visual\ Studio\ Code.app/Contents/MacOS/Electron $*"
+# alias code="open /Applications/Visual\ Studio\ Code.app --args $*"
