@@ -1,9 +1,7 @@
 [user]
 	name = Doug Ilijev
-	#email = doug.ilijev@gmail.com
+	email = doug.ilijev@gmail.com
 
-[user]  # DTMX
-	email = doug.ilijev@datamarx.com
 [include]
 	path = ~/dtmx.gitconfig
 
@@ -201,7 +199,7 @@
 	compact      = %C(auto)[ %h ]  %ad  (%C(green dim)%an <%ae>%Creset%C(auto))%n    %s%n
 	compact-nc   = [%h]  %ad  (%an <%ae>)%n    %s%n
 	crisp        = [ %C(auto)%h ] %ad %C(green dim)%<(20,trunc)%ae%Creset%C(auto)%d %s
-	crisp-cdate  = [ %C(auto)%h ] %ad %C(green dim)%<(20,trunc)%ae%Creset %C(yellow dim)|C:%Creset %cd %C(green dim)%<(10,trunc)%ce%Creset%C(auto)%d %s
+	crisp-cdate  = [ %C(auto)%h ] %ad %C(green dim)%<(20,trunc)%ae%Creset %C(yellow dim)|C:%Creset %cd %C(green dim)%<(20,trunc)%ce%Creset%C(auto)%d %s
 	crisp-nc     = [ %h ] %ad | %<(20,trunc)%ae | %s                                               # display crisp with no color formatting (to make it easier to read when saved to a file)
 	crisp-short  = %C(auto)%h %C(green dim)%<(10,trunc)%ae%Creset%C(auto)%d %s
 	sweet        = %C(auto)%h %C(green dim)%<(20,trunc)%ae%Creset%C(auto)%d %<(80,trunc)%s         # same as crisp-short with truncation of the message to 80 char
