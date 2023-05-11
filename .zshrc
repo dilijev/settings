@@ -109,3 +109,5 @@ fi
 if [ -f ~/.dtmx_aliases ]; then
     . ~/.dtmx_aliases
 fi
+
+eval $(thefuck --alias)
