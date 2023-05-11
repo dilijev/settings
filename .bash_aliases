@@ -33,3 +33,5 @@ alias exe='chmod 755'
 #alias clc='clear'
 alias up='cd ..'
 alias u='up'
+
+alias rgn='rg --no-ignore'
