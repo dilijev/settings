@@ -1,8 +1,8 @@
 #!/usr/bin/bash
 
 # Bruce's functions
-pull_repo() { echo "Pulling in repo $1" && pushd $1 && git pull -r && popd }
-checkout_main() { echo "Checkout main in repo $1" && pushd $1 && git checkout main && git pull -r && popd }
+pull_repo() { echo "Pulling in repo $1" && pushd $1 && git pull -r ; popd }
+checkout_main() { echo "Checkout main in repo $1" && pushd $1 && git checkout main && git pull -r ; popd }
 
 export CHROMIUM_LLDBINIT_SOURCED=1
 
@@ -72,6 +72,8 @@ export PRIMARY_RELEASE_ARG="'${HOME}/dtmx/marx-browser/src/out/Release/${PRIMARY
 export PRIMARY_DEBUG_ARM64_ARG="'${HOME}/dtmx/marx-browser/src/out/Debug_arm64/${PRIMARY_APP_NAME_DEV}'"
 export PRIMARY_DEBUG_ARG="'${HOME}/dtmx/marx-browser/src/out/Debug/${PRIMARY_APP_NAME_DEV}'"
 
+export _LOGGING_ARG="--enable-logging --v=0"
+
 # open with flags set
 
 export _F_DPX_FLAG_VALUE='--disable-primary-extensions'
@@ -90,11 +92,19 @@ set_dark() { export _F_DARK_FLAG="${_F_DARK_FLAG_VALUE}" ; }
 clr_dark() { export _F_DARK_FLAG="" ; }
 
 export _F_UDD_FLAG=""
+main_udd() { export _F_UDD_FLAG="'--user-data-dir=${PRIMARY_TEST_DATA_DIR}'" ; }
+alias xp="main_udd"
 set_udd() { export _F_UDD_FLAG="'--user-data-dir=$1'" ; }
 clr_udd() { export _F_UDD_FLAG="" ; }
 
-alias edf="echo 'open ${PRIMARY_DEBUG_ARM64_ARG} --args ${_F_DPX_FLAG} ${_F_COMP_FLAG} ${_F_DARK_FLAG} ${_F_UDD_FLAG}'"
-alias odf="open ${PRIMARY_DEBUG_ARM64_ARG} --args ${_F_DPX_FLAG} ${_F_COMP_FLAG} ${_F_DARK_FLAG} ${_F_UDD_FLAG}"
+# NOTE: These need to be functions instead of aliases to pick up the current values of the _F_ variables.
+edfx() { echo "open ${PRIMARY_DEBUG_ARM64_ARG} --args ${_LOGGING_ARG} ${_F_DPX_FLAG} ${_F_COMP_FLAG} ${_F_DARK_FLAG} ${_F_UDD_FLAG}" ; }
+# NOTE: 'sh -c' to invoke the constructed command because calling `open` on a variable expanded badly with an implied relative path inserted,
+# and calling a subshell for the constructed command, i.e. $("command") had weird semantics too.
+odfx() { sh -c "open ${PRIMARY_DEBUG_ARM64_ARG} --args ${_LOGGING_ARG} ${_F_DPX_FLAG} ${_F_COMP_FLAG} ${_F_DARK_FLAG} ${_F_UDD_FLAG}" ; }
+
+erfx() { echo "open ${PRIMARY_RELEASE_ARM64_ARG} --args ${_LOGGING_ARG} ${_F_DPX_FLAG} ${_F_COMP_FLAG} ${_F_DARK_FLAG} ${_F_UDD_FLAG}" ; }
+orfx() { sh -c "open ${PRIMARY_RELEASE_ARM64_ARG} --args ${_LOGGING_ARG} ${_F_DPX_FLAG} ${_F_COMP_FLAG} ${_F_DARK_FLAG} ${_F_UDD_FLAG}" ; }
 
 # ABC (A = action, B = build flavor, C = extras)
 #
@@ -114,21 +124,15 @@ alias drp="rm -rf '/Applications/${PRIMARY_APP_NAME}'; cp -r '${PRIMARY_RELEASE_
 alias drpd="rm -rf '/Applications/${PRIMARY_APP_NAME_DEV}'; cp -r '${PRIMARY_RELEASE_APP_DEV}' '/Applications/${PRIMARY_APP_NAME_DEV}'"
 alias ora="open '${home}/dtmx/marx-browser/src/out/release_arm64/'"
 alias ori="open '${HOME}/dtmx/marx-browser/src/out/Release/'"
-alias orx="open '${HOME}/dtmx/marx-browser/src/out/Release_arm64/${PRIMARY_APP_NAME}'"
-alias orxp="open '${HOME}/dtmx/marx-browser/src/out/Release_arm64/${PRIMARY_APP_NAME}' --args ${PRIMARY_TEST_DATA_DIR_OPT}"
-
-orxudd() {
-    echo "open '${HOME}/dtmx/marx-browser/src/out/Release_arm64/${PRIMARY_APP_NAME}' --args --disable-primary-extensions --user-data-dir=$1" ;
-    open '${HOME}/dtmx/marx-browser/src/out/Release_arm64/${PRIMARY_APP_NAME}' --args --user-data-dir=$1 ;
-}
-
+alias orx="open '${HOME}/dtmx/marx-browser/src/out/Release_arm64/${PRIMARY_APP_NAME}' --args ${_LOGGING_ARG}"
+alias orxp="open '${HOME}/dtmx/marx-browser/src/out/Release_arm64/${PRIMARY_APP_NAME}' --args ${_LOGGING_ARG} ${PRIMARY_TEST_DATA_DIR_OPT}"
 
 alias orxi="open '${HOME}/dtmx/marx-browser/src/out/Release/${PRIMARY_APP_NAME}'"
 alias orxd="open '${HOME}/dtmx/marx-browser/src/out/Release_arm64/${PRIMARY_APP_NAME_DEV}'"
 alias oda="open '${HOME}/dtmx/marx-browser/src/out/Debug_arm64/'"
 alias odi="open '${HOME}/dtmx/marx-browser/src/out/Debug/'"
-alias odx="open '${HOME}/dtmx/marx-browser/src/out/Debug_arm64/${PRIMARY_APP_NAME_DEV}'"
-alias odxp="open '${HOME}/dtmx/marx-browser/src/out/Debug_arm64/${PRIMARY_APP_NAME_DEV}' --args ${PRIMARY_TEST_DATA_DIR_OPT}"
+alias odx="open '${HOME}/dtmx/marx-browser/src/out/Debug_arm64/${PRIMARY_APP_NAME_DEV}' --args ${_LOGGING_ARG}"
+alias odxp="open '${HOME}/dtmx/marx-browser/src/out/Debug_arm64/${PRIMARY_APP_NAME_DEV}' --args ${_LOGGING_ARG} ${PRIMARY_TEST_DATA_DIR_OPT}"
 alias odxi="open '${HOME}/dtmx/marx-browser/src/out/Debug/${PRIMARY_APP_NAME_DEV}'"
 alias odxd="open '${HOME}/dtmx/marx-browser/src/out/Debug_arm64/${PRIMARY_APP_NAME_DEV}'"
 
