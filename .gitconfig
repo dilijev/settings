@@ -173,11 +173,13 @@
 
 	gone = "!sh -c 'git branch -vv | rg \": gone\\]\" ' "
 	gone-name-only = "!sh -c 'git branch -vv | rg \": gone\\]\" | rg \"^\\s+user/\" | awk \"{ print \\$1 }\" ' "
+	begone = "!sh -c 'git gone | awk \"{ print $1 }\" | xargs -I {} git br -D {}' "
 
 [alias]  # shorthand for master (m) and main (n) commands
 	# force (f) update branch (b) without switching (bf.)
 	bfm = !git fetch origin master && git branch -f master origin/master
 	bfn = !git fetch origin main && git branch -f main origin/main
+	bfb = "!sh -c 'git fetch origin $1 && git branch -f $1 origin/$1 #' $*"
 
 	# checkout (co.) master/main (m/n)
 	com = checkout master
@@ -209,6 +211,7 @@
 
 [push]
 	default = simple
+	autoSetupRemote = true
 
 # stuff that affects output of many git commands, possibly unexpectedly, best to leave it out in case this config is ported to another machine, and set these values on aliased commands instead
 [format]
@@ -335,6 +338,7 @@
 
 [branch]
 	autosetuprebase = always
+	autoSetupMerge = true
 [pull]
 	rebase = true
 [init]
