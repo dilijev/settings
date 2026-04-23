@@ -3,9 +3,6 @@
 	email = doug.ilijev@gmail.com
 
 [include]
-	path = ~/dtmx.gitconfig
-
-[include]
 	path = ~/g.gitconfig
 
 [alias]
