@@ -52,3 +52,4 @@ umask 077
 export MAIL PS1 EDITOR MAILER
 
 source ~/.bashrc
+. "$HOME/.cargo/env"

@@ -106,11 +106,43 @@ if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
 
-if [ -f ~/.dtmx_aliases ]; then
-    . ~/.dtmx_aliases
-fi
+# if [ -f ~/.dtmx_aliases ]; then
+#     . ~/.dtmx_aliases
+# fi
 
 export NVS_HOME="$HOME/.nvs"
 [ -s "$NVS_HOME/nvs.sh" ] && . "$NVS_HOME/nvs.sh"
 
+## NVS Setup - Add this to ~/.zshrc
+#export NVS_HOME="$HOME/.nvs"
+## Get the actual nvs script path from Homebrew
+#NVS_SOURCE_SCRIPT="$(brew --prefix nvs)/libexec/nvs.sh"
+#if [ -f "$NVS_SOURCE_SCRIPT" ]; then
+#  . "$NVS_SOURCE_SCRIPT"
+#fi
+
 eval $(thefuck --alias)
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
+# ZSH CUSTOM PROMPT
+
+setopt PROMPT_SUBST
+
+precmd() {
+  LAST_EXIT_CODE=$?
+}
+
+## simple replication of my bashrc PS1, with preceding newline, incorporating $(git_prompt_info)
+export PROMPT=$'\n[${LAST_EXIT_CODE}] %F{red}%* %F{green}%n@%m%F{reset}:%F{cyan}%B%~%b$(git_prompt_info) %F{cyan}%(!.#.»)%F{reset} '
+export RPROMPT=''
+
+# force git pager=cat (instead of default less, no paging)
+alias cit="git -c core.pager=cat $*"
+# force git editor=vim (instead of default nano)
+alias vit="git -c core.editor=vim $*"
+
+alias code="/Applications/Visual\ Studio\ Code.app/Contents/MacOS/Electron $*"
+# alias code="open /Applications/Visual\ Studio\ Code.app --args $*"

@@ -13,12 +13,18 @@ alias ll='ls -lA'
 
 # alias eb='vim ~/.bashrc'
 # alias sb='source ~/.bashrc'
+
 alias ea='vim ~/.bash_aliases'
 alias sa='source ~/.bash_aliases'
+alias ca='cat ~/.bash_aliases'
+
 alias ez='vim ~/.zshrc'
 alias sz='source ~/.zshrc'
+alias cz='cat ~/.zshrc'
+
 alias ex='vim ~/.dtmx_aliases'
 alias sx='source ~/.dtmx_aliases'
+alias cx='cat ~/.dtmx_aliases'
 
 #alias fasd-init='eval "$(fasd --init auto)"'
 #alias nvm-init='. "$NVM_DIR/nvm.sh"'
@@ -32,5 +38,8 @@ alias exe='chmod 755'
 alias up='cd ..'
 alias u='up'
 
+alias hist='history | tail -n 30'
+
 alias rgn='rg --no-ignore'
 alias rgf='rg -uu --files -g'
+alias rgc="rg -g '*.cc' -g '*.h'"

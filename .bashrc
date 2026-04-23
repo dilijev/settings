@@ -197,3 +197,4 @@ export NVM_DIR="${HOME}/.nvm"
 #if [[ ( ! `cat /proc/version` =~ Microsoft ) || ( -n "${FORCE_FASD}" ) ]]; then
 #    eval "$(fasd --init auto)"
 #fi
+. "$HOME/.cargo/env"
